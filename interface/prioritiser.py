@@ -26,7 +26,7 @@ def update_zoom(universe, camera, modifier, focus_change=False):
             specific_strength(camera, universe, object, global_strength)
 
     consistent.specific_strength = 1
-    consistent.label.color = (*(consistent.color*consistent.specific_strength).astype(int), 255)
+    consistent.label.recalculate_color()
 
     update_features(universe, camera, focus_change)
 

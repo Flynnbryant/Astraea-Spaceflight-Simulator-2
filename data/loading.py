@@ -1,3 +1,11 @@
+'''
+loading.py - 3 functions
+
+Reading all textures from storage (data/textures/) and processing them to be mapped
+onto spheroids or other uses. This is where the majority of start up time is taken
+(approximately 2 seconds, down from 40+ without multithreading.)
+'''
+
 import concurrent.futures
 import multiprocessing
 from OpenGL.GL import *
@@ -8,34 +16,75 @@ import time
 import os
 
 def load_textures(universe, camera):
-    Image.MAX_IMAGE_PIXELS = None
+    ''' Manager to load textures using multithreading to reduce startup time.
+
+    Inputs: universe and camera overarching objects.
+
+    Outputs:
+    * body.texture: Imported, processed, and assigned textures for every simulated body.
+    * camera.background.star_texture: The imported and processed star background.
+    '''
+
+    Image.MAX_IMAGE_PIXELS = None #Required to allow very large image files.
     with concurrent.futures.ThreadPoolExecutor() as executor:
         required_textures = ['GalaxyLR','Default']
-        camera.highres = True
+
+        ''' Return all filenames in the folder of object textures without an extension '''
         available_textures = [i[:-4] for i in os.listdir('data/textures/highres/')]
+
+        ''' Match up which objects have textures present (if not they will be given the default texture)'''
         for body in universe.bodies:
             if body.name in available_textures:
                 required_textures.append(body.name)
-                body.texture = body.name
+                body.texture = body.name #overrites the default texture assignment.
 
+        ''' Distribute textures for multithreading (I/O operation)'''
         results = [executor.submit(import_texture, objectname) for objectname in required_textures]
+
+        ''' Move each texture through for processing as soon as it has been imported.
+        Multithreading is not useful here so the smallest texture files are processed
+        while others are still being imported. Unlike importing, processing a texture
+        can be completed in near constant time and is not dependent on texture size.'''
         for finished in concurrent.futures.as_completed(results):
             imported_tex = finished.result()
-            mapped_texture = process_texture(imported_tex[0], imported_tex[1])
+            mapped_texture = process_texture(*imported_tex)
+
+            ''' Assign the textures to their respective objects '''
             if imported_tex[2] == 'GalaxyLR':
-                camera.background.star_texture = mapped_texture
-            else:
-                for body in universe.bodies:
-                    if body.texture == imported_tex[2]:
-                        body.texture = mapped_texture
+                camera.background.star_texture = mapped_texture 
+            for body in universe.bodies:
+                if body.texture == imported_tex[2]:
+                    body.texture = mapped_texture
+
+
 
 def import_texture(objectname):
+    ''' Load an RGB image file (without transparency) into an image file in bytes.
+
+    Inputs:
+    * objectname: name of the image file (typically the planet or moon name.)
+
+    Outputs:
+    * Image format object
+    '''
+
     filename = 'data/textures/highres/'+objectname+'.jpg'
     img = Image.open(filename)
     return img.tobytes('raw', 'RGB', 0, -1), img.size, objectname
-    # Compare tobytes with tostring and check performance. If so, change on ring loading too
 
-def process_texture(img_data, size):
+
+
+def process_texture(img_data, size, name):
+    ''' Convert the image into a texture format that openGL can then map onto spheroids.
+
+    Inputs:
+    * img_data: Image file (converted to bytes in the inport step.)
+    * size: Size of the image
+
+    Outputs:
+    * texture: format to be mapped onto speroids.
+    '''
+
     texture = glGenTextures(1)
     glBindTexture(GL_TEXTURE_2D, texture)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, size[0], size[1], 0, GL_RGB, GL_UNSIGNED_BYTE, img_data)

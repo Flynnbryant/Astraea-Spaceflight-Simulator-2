@@ -2,6 +2,8 @@ import numpy as np
 import time
 import csv
 
+from graphics.labels import *
+
 from analysis.profile import *
 from spacecraft.node import *
 from mechanics.body import *

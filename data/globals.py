@@ -1,3 +1,14 @@
+'''
+globals.py
+
+Creating global objects for the universe, window, and camera classes.
+This is particularly useful for the window class of type Interface,
+which inherits mouse movements and actions from pyglet.window.Window.
+
+Each function passes on the initialisation call and sets the resulting
+object to global.
+'''
+
 import pyglet
 from data.universe import *
 from graphics.camera import *
@@ -11,8 +22,6 @@ def init_universe(*args, **kwargs):
 def init_window(*args, **kwargs):
     global window
     window = Interface(*args, **kwargs)
-    window.set_icon(pyglet.image.load('data/textures/icon.png'))
-    #window.set_caption('Astraea Space')
     return window
 
 def init_camera(*args, **kwargs):

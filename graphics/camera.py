@@ -13,8 +13,6 @@ from graphics.lighting import *
 from graphics.background import *
 from interface.utilities import *
 
-import time
-
 class Camera:
     def __init__(self, window, keys, universe):
         glEnable(GL_DEPTH_TEST)
@@ -29,8 +27,8 @@ class Camera:
         self.perspective = self.window.width/self.window.height
         self.pos = np.array([0., 0., -2.])
         self.camera_distance = 1e8
-        self.horizontal_rot = 180
-        self.vertical_rot = -75
+        self.horizontal_rot = 180.1
+        self.vertical_rot = -75.1
         self.tilt = 0
         self.focus = 0
         self.fov = 45
@@ -40,13 +38,17 @@ class Camera:
         self.cinematic_time = 0.
         self.light = Lighting(universe.star)
         self.flare = Flare()
+
+        sprite_image = pyglet.image.load('data/sprites/sol_flare.png')
+        self.sprite = pyglet.sprite.Sprite(sprite_image, x=50, y=50)
+        self.sprite.scale = 0.05
+        
         for body in universe.bodies:
             if body.name == 'Earth':
                 self.background = Background(body)
         update_focus(universe, self, 0)
         self.switch = False
         load_textures(universe, self)
-        #self.screen = (pyglet.canvas.Display()).get_default_screen() <- Probably for interface
 
     def moveCamera(self):
         glMatrixMode(GL_PROJECTION)

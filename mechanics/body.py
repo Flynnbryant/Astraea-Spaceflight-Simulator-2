@@ -12,6 +12,8 @@ class Body(Entity):
     def __init__(self, data, universe, focus):
         self.bodycentre, self.barycentre = create_centres(self, sn(data[10]), universe.grav_constant)
         super().__init__(data, universe, focus)
+        self.labelbatch = LabelBatch()
+        mass_scale = 0.0001*np.log10(self.bodycentre.mass)
 
         if self.primary:
             self.primary.satellites.append(self)
@@ -20,12 +22,13 @@ class Body(Entity):
             self.primary.object.barycentre.inverse_SGP = 1/self.primary.object.barycentre.SGP
             self.primary.object.barycentre.inverse_mass = 1/self.primary.object.barycentre.mass
             self.trace = Trace(self, 52, True)
+            self.label = EntityLabel(self, width = mass_scale, height = 20*mass_scale, labelbatch = self.primary.object.labelbatch)
         else:
+            self.label = EntityLabel(self, width = mass_scale, height = 20*mass_scale, labelbatch = self.labelbatch)
             universe.star = self
             self.hill = np.Inf
             self.SOI = np.Inf
 
-        self.label = EntityLabel(self, width = 0.0001*np.log10(self.bodycentre.mass), height = 0.002*np.log10(self.bodycentre.mass))
         self.rings = Ring(self) if self.name == 'Saturn' else False
         self.shape_and_orientation(data)
         self.spheroid = Spheroid(self)

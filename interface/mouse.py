@@ -7,6 +7,7 @@ from interface.utilities import *
 class Interface(pyglet.window.Window):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.set_icon(pyglet.image.load('data/textures/icon.png'))
         self.dragging = False
 
     def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
@@ -26,14 +27,16 @@ class Interface(pyglet.window.Window):
             scaledy = (y-data.globals.camera.halfheight)*data.globals.camera.invhalfheight
 
             if data.globals.camera.planetary_view:
-                consider = [data.globals.universe.focus_entity.local_planet] + data.globals.universe.focus_entity.local_planet.satellites 
+                consider = [data.globals.universe.focus_entity.local_planet] + data.globals.universe.focus_entity.local_planet.satellites
             else:
                 consider = data.globals.universe.star.satellites
 
             for object in consider:
-                if data.globals.camera.camera_distance < object.label_distance:
-                    centre = model_to_projection(data.globals.camera, object.apos)
-                    #print(centre, scaledx, scaledy)
+                if data.globals.camera.camera_distance < object.outer_label_distance:
+                    centre = model_to_projection(data.globals.camera, object.bodycentre.apos)
+                    print(data.globals.camera.cinematic_view, object.bodycentre.apos)
+                    ''' This centre is different when in cinematic mode'''
+                    ''' Try drawing one label to see if labels change too, or if something about having to draw a label resets it '''
                     if np.abs(centre[0]-scaledx) < 0.02 and np.abs(centre[1]-scaledy) < 0.1:
                         data.globals.universe.focus = object.focus_num
                         data.globals.universe.focus_entity = object

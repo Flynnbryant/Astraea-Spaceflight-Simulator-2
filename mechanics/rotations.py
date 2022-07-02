@@ -59,12 +59,24 @@ def celestial_to_ecliptic(RA, DEC):
 
 def quaternion_rotation_matrix(angle, vec):
     '''
-    Ensure that angle is radians, and vec is unit.
+    Calculates and returns a rotation matrix to transform coordinates between frames of reference.
+
+    Inputs:
+        * angle (radians) - the angle to rotate the coordinate system by.
+
+        * vec (unit) - the axis of rotation about which to rotate the coordinate system.
+
+    Outputs:
+        * rotation_matrix - A transofmration matrix that can be used in matrix multiplication
+            to convert coordinates between two frames of reference.
     '''
     cosa = np.cos(angle)
     sina = np.sin(angle)
     omcos = 1-cosa
-    return np.matrix([
+
+    rotation_matrix = np.matrix([
     [cosa+omcos*vec[0]**2, omcos*vec[0]*vec[1]-vec[2]*sina, omcos*vec[0]*vec[2]+vec[1]*sina],
     [omcos*vec[0]*vec[1]+vec[2]*sina, cosa+omcos*vec[1]**2, omcos*vec[1]*vec[2]-vec[0]*sina],
     [omcos*vec[0]*vec[2]-vec[1]*sina, omcos*vec[1]*vec[2]+vec[0]*sina, cosa+omcos*vec[2]**2]])
+
+    return rotation_matrix

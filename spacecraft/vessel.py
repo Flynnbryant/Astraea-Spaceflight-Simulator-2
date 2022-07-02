@@ -6,7 +6,8 @@ class Vessel(Entity):
         self.bodycentre = Vesselcentre(self)
         self.barycentre = Blankcentre()
         super().__init__(data, universe, focus)
-        self.label = EntityLabel(self, width = 0.008, height = 0.03)
+        self.labelbatch = LabelBatch()
+        self.label = EntityLabel(self, width = 0.008, height = 0.03, labelbatch = self.labelbatch)
         universe.vessels.append(self)
         self.trace = Trace(self, 52, True)
 

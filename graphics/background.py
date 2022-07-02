@@ -27,5 +27,5 @@ class Background:
         glRotatef(0,*self.axis_vector)
         glRotatef(*self.tilt_quaternion)
         glColor3f(*self.strength)
-        gluSphere(self.galaxyQuadric, self.size, 128, 32)
+        gluSphere(self.galaxyQuadric, self.size, 64, 32)
         glDisable(GL_TEXTURE_2D)
