@@ -19,7 +19,7 @@ class Universe:
         self.c = 299792458
         self.time = 1640995200 #Unix time for 2022 Jan 1st 00:00, the simulation start point
         self.framecount = 0
-        self.usertime = 1
+        self.usertime = 1.0
         self.bodies = []
         self.vessels = []
         self.entities = []

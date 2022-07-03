@@ -18,7 +18,7 @@ def key_controls(universe, camera, dt):
 
 def simulation_keys(universe, camera, dt):
     if camera.keys[pyglet.window.key.P]:
-        universe.usertime = min(universe.usertime*(1+10*dt), 31500000)
+        universe.usertime = min(universe.usertime*(1+10*dt), 31536000)
     elif camera.keys[pyglet.window.key.O]:
         universe.usertime *= (1-10*dt)
     if camera.keys[pyglet.window.key.F] or camera.keys[pyglet.window.key.BRACKETLEFT]:

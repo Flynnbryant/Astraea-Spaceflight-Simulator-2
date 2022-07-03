@@ -21,7 +21,10 @@ def drawScene(universe, camera):
 
     camera.window.clear()
     [feature.draw(universe, camera) for feature in camera.draw_features]
+
     #camera.sprite.draw()
+    camera.HUD.draw(universe, camera)
+
     glFlush()
 
 def update_features(universe, camera, focus_change = False):

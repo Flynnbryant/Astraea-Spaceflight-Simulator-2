@@ -12,6 +12,7 @@ from interface.prioritiser import *
 from graphics.lighting import *
 from graphics.background import *
 from interface.utilities import *
+from interface.telemetry import *
 
 class Camera:
     def __init__(self, window, keys, universe):
@@ -38,11 +39,12 @@ class Camera:
         self.cinematic_time = 0.
         self.light = Lighting(universe.star)
         self.flare = Flare()
+        self.HUD = HUD(universe, self)
 
         sprite_image = pyglet.image.load('data/sprites/sol_flare.png')
         self.sprite = pyglet.sprite.Sprite(sprite_image, x=50, y=50)
         self.sprite.scale = 0.05
-        
+
         for body in universe.bodies:
             if body.name == 'Earth':
                 self.background = Background(body)
