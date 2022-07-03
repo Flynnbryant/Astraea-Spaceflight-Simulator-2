@@ -41,9 +41,9 @@ class Camera:
         self.flare = Flare()
         self.HUD = HUD(universe, self)
 
-        sprite_image = pyglet.image.load('data/sprites/sol_flare.png')
-        self.sprite = pyglet.sprite.Sprite(sprite_image, x=50, y=50)
-        self.sprite.scale = 0.05
+        sprite_image = pyglet.image.load('data/sprites/timebackground.png')
+        self.sprite = pyglet.sprite.Sprite(sprite_image, x=-self.halfwidth-100, y=self.halfheight-55)
+        self.sprite.scale = 0.08
 
         for body in universe.bodies:
             if body.name == 'Earth':

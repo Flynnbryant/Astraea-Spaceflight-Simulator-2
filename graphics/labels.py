@@ -23,20 +23,41 @@ class EntityLabel:
             entity.name,
             font_name='CMU Bright Roman',
             font_size=12,
-            color = (*(self.entity.color*self.entity.specific_strength).astype(int), 255),
+            color = (*(self.entity.color).astype(int), int(255*self.entity.specific_strength)),
             width=20,
             height=10,
             align='center',
             anchor_x='center', anchor_y='bottom',
             batch = self.batch)
         self.text.content_valign = 'bottom'
+        if self.entity.name == 'Spacecraft':
+            self.altitude = pyglet.text.Label(
+                entity.name,
+                font_name='CMU Bright Roman',
+                font_size=8,
+                color = (*(self.entity.color).astype(int), int(255*self.entity.specific_strength)),
+                width=20,
+                height=10,
+                align='center',
+                anchor_x='center', anchor_y='bottom',
+                batch = self.batch)
+            self.velocity = pyglet.text.Label(
+                entity.name,
+                font_name='CMU Bright Roman',
+                font_size=8,
+                color = (*(self.entity.color).astype(int), int(255*self.entity.specific_strength)),
+                width=20,
+                height=10,
+                align='center',
+                anchor_x='center', anchor_y='bottom',
+                batch = self.batch)
 
     def regenerate_label(self):
         self.text = pyglet.text.Label(
             self.entity.name,
             font_name='CMU Bright Roman',
             font_size=12,
-            color = (*(self.entity.color*self.entity.specific_strength).astype(int), 255),
+            color = (*(self.entity.color).astype(int), int(255*self.entity.specific_strength)),
             width=20,
             height=10,
             align='center',
@@ -66,4 +87,15 @@ class EntityLabel:
             self.text.x=pos[0]*camera.halfwidth
             self.text.y=(pos[1]+self.triangle_height+0.02)*camera.halfheight
             self.text.draw()
+            if self.entity.name == 'Spacecraft':
+                self.altitude.x = (pos[0])*camera.halfwidth
+                self.altitude.y = (pos[1]+self.triangle_height+0.045)*camera.halfheight
+                self.altitude.text = str(round(self.entity.rel_dist/1000,3))+'km'
+                self.altitude.draw()
+
+                self.velocity.x = (pos[0])*camera.halfwidth
+                self.velocity.y = (pos[1]+self.triangle_height+0.07)*camera.halfheight
+                self.velocity.text = str(round(np.linalg.norm(self.entity.bodycentre.rvel),3))+'m/s'
+                self.velocity.draw()
+
         glEnable(GL_DEPTH_TEST)

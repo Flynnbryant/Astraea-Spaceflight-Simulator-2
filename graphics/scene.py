@@ -20,10 +20,11 @@ def drawScene(universe, camera):
         entity.barycentre.apos += subtract
 
     camera.window.clear()
-    [feature.draw(universe, camera) for feature in camera.draw_features]
 
-    #camera.sprite.draw()
     camera.HUD.draw(universe, camera)
+    camera.sprite.draw()
+
+    [feature.draw(universe, camera) for feature in camera.draw_features]
 
     glFlush()
 

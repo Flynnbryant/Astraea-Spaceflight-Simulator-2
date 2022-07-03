@@ -15,7 +15,6 @@ class HUD:
         self.timestamp_label.text.y = camera.halfheight*0.98
 
     def draw(self, universe, camera):
-        #self.timestep_label.text.text = 'Rate: ' + str(round(universe.usertime,6)) + 'x'
         self.timestep_label.text.text = f'Rate: {str(timedelta(seconds=universe.usertime))} /s'
         self.timestep_label.text.draw()
         self.timestamp_label.text.text = datetime.utcfromtimestamp(universe.time).strftime('%Y-%m-%d %H:%M:%S.%f UTC')

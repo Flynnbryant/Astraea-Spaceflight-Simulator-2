@@ -33,11 +33,14 @@ def render_detail(camera, universe, object):
         object.render_detail = 16
 
 def specific_strength(camera, universe, object, global_strength):
-    if object.primary is universe.focus_entity.primary:
-        distance = max(universe.focus_entity.semi_major_axis,camera.camera_distance-object.semi_major_axis)
+    if object is universe.focus_entity:
+        object.specific_strength = 1
     else:
-        distance = camera.camera_distance
-    inner_strength = 2*distance/object.inner_label_distance - 1
-    outer_strength = 2 - distance/object.outer_label_distance
-    object.specific_strength = np.clip(min([inner_strength,outer_strength,global_strength]),0,1)
+        if object.primary is universe.focus_entity.primary:
+            distance = max(universe.focus_entity.semi_major_axis,camera.camera_distance-object.semi_major_axis)
+        else:
+            distance = camera.camera_distance
+        inner_strength = 2*distance/object.inner_label_distance - 1
+        outer_strength = 2 - distance/object.outer_label_distance
+        object.specific_strength = np.clip(min([inner_strength,outer_strength,global_strength]),0,1)
     object.label.recalculate_color()
