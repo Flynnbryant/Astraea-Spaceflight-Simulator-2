@@ -14,6 +14,9 @@ from mechanics.utilities import *
 class Universe:
     def __init__(self, focus, profiler):
         self.profile = Profile(profiler)
+        self.focusinput = focus
+
+    def populate(self):
         self.nodes = [Node(False,253399708800)]
         self.grav_constant = 6.67430*10**-11
         self.c = 299792458
@@ -27,7 +30,7 @@ class Universe:
         with open(f'data/full.csv') as f:
             data = list(csv.reader(f))
             for entity in data[1:]:
-                Body(entity, self, focus) if entity[1] == 'body' else Vessel(entity, self, focus)
+                Body(entity, self, self.focusinput) if entity[1] == 'body' else Vessel(entity, self, self.focusinput)
             #initialise_entities()
             #configure_masses()
             #generate_orbits()

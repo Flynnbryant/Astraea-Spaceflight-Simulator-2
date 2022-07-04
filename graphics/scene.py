@@ -12,8 +12,12 @@ import numpy as np
 import time
 
 def drawScene(universe, camera):
+    recentre_solar_system(universe, camera)
     camera.window.clear()
+    [feature.draw(universe, camera) for feature in camera.draw_features]
+    glFlush()
 
+def recentre_solar_system(universe, camera):
     if universe.refresh_object.trace in camera.traces:
         universe.refresh_object.trace.calculate_trace()
         universe.refresh_object.label.regenerate_label()
@@ -22,14 +26,11 @@ def drawScene(universe, camera):
         entity.bodycentre.apos += subtract
         entity.barycentre.apos += subtract
 
-    [feature.draw(universe, camera) for feature in camera.draw_features]
-    glFlush()
-
 def update_features(universe, camera, focus_change = False):
     camera.spheroids = []
     camera.traces = []
     camera.labels = [DrawProfile('tra')]
-    camera.draw_features = [camera.light, camera.flare, DrawProfile('lig'), camera.HUD, DrawProfile('hud')]
+    camera.draw_features = [camera.HUD, DrawProfile('hud'), camera.light, camera.flare, DrawProfile('lig')]
     if camera.planetary_view:
         for object in [universe.focus_entity.local_planet] + universe.focus_entity.local_planet.satellites:
             if object.specific_strength > 0:

@@ -18,26 +18,16 @@ import os
 
 def loading_screen(universe, camera):
     camera.window.clear()
-    loading_text = pyglet.text.Label(
-        'Loading Textures',
-        font_name='CMU Bright Roman',
-        font_size=32,
-        width = 500,
-        color = (0, 239, 255, 255),
-        multiline = True,
-        anchor_y='top')
-    loading_text.anchor_x = 'center'
-    loading_text.x = -camera.halfwidth*0
-    loading_text.y = camera.halfheight*0.1
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
     gluOrtho2D(-camera.halfwidth, camera.halfwidth, -camera.halfheight, camera.halfheight)
-    loading_text.draw()
+    camera.loadingscreen.draw()
     if camera.screenstate == 1:
+        universe.populate()
+        camera.populate(universe)
         load_textures(universe, camera)
     camera.screenstate += 1
     glFlush()
-    print(time.time())
 
 def load_textures(universe, camera):
     ''' Manager to load textures using multithreading to reduce startup time.

@@ -16,16 +16,19 @@ from interface.telemetry import *
 
 class Camera:
     def __init__(self, window, keys, universe):
-        self.screenstate = 0
         glEnable(GL_DEPTH_TEST)
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
+        self.screenstate = 0
         self.keys = keys
         self.window = window
         self.halfwidth = self.window.width//2
         self.halfheight = self.window.height//2
         self.invhalfwidth = 1/self.halfwidth
         self.invhalfheight = 1/self.halfheight
+        self.loadingscreen = pyglet.sprite.Sprite(pyglet.image.load('data/sprites/loadingscreen.png'), x=self.halfwidth*-0.425, y=self.halfheight*-0.985)
+
+    def populate(self, universe):
         self.perspective = self.window.width/self.window.height
         self.pos = np.array([0., 0., -2.])
         self.camera_distance = 1e8
@@ -42,16 +45,11 @@ class Camera:
         self.flare = Flare()
         self.HUD = HUD(universe, self)
 
-        sprite_image = pyglet.image.load('data/sprites/timebackground.png')
-        self.sprite = pyglet.sprite.Sprite(sprite_image, x=-self.halfwidth-100, y=self.halfheight-55)
-        self.sprite.scale = 0.08
-
         for body in universe.bodies:
             if body.name == 'Earth':
                 self.background = Background(body)
         update_focus(universe, self, 0)
         self.switch = False
-        #load_textures(universe, self)
 
     def moveCamera(self):
         glMatrixMode(GL_PROJECTION)
