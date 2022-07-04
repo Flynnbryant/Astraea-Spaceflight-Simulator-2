@@ -1,6 +1,7 @@
 from pyglet import *
 from OpenGL.GL import *
 from graphics.camera import *
+from data.loading import *
 from graphics.trace import *
 from graphics.labels import *
 from graphics.rings import *
@@ -11,6 +12,8 @@ import numpy as np
 import time
 
 def drawScene(universe, camera):
+    camera.window.clear()
+
     if universe.refresh_object.trace in camera.traces:
         universe.refresh_object.trace.calculate_trace()
         universe.refresh_object.label.regenerate_label()
@@ -19,20 +22,14 @@ def drawScene(universe, camera):
         entity.bodycentre.apos += subtract
         entity.barycentre.apos += subtract
 
-    camera.window.clear()
-
-    camera.HUD.draw(universe, camera)
-    camera.sprite.draw()
-
     [feature.draw(universe, camera) for feature in camera.draw_features]
-
     glFlush()
 
 def update_features(universe, camera, focus_change = False):
     camera.spheroids = []
     camera.traces = []
     camera.labels = [DrawProfile('tra')]
-    camera.draw_features = [camera.light, camera.flare, DrawProfile('lig')]
+    camera.draw_features = [camera.light, camera.flare, DrawProfile('lig'), camera.HUD, DrawProfile('hud')]
     if camera.planetary_view:
         for object in [universe.focus_entity.local_planet] + universe.focus_entity.local_planet.satellites:
             if object.specific_strength > 0:

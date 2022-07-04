@@ -12,7 +12,7 @@ from mechanics.perturb_vessels import *
 
 def simulation(universe, dt):
     universe.profile.add('buf')
-    universe.timestep = universe.usertime*dt
+    universe.timestep = (universe.usertime*dt if dt < 0.1 else 0)
 
     osculating_orbits(universe)
     perturb_bodies(universe)

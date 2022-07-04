@@ -16,6 +16,7 @@ from interface.telemetry import *
 
 class Camera:
     def __init__(self, window, keys, universe):
+        self.screenstate = 0
         glEnable(GL_DEPTH_TEST)
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
@@ -50,7 +51,7 @@ class Camera:
                 self.background = Background(body)
         update_focus(universe, self, 0)
         self.switch = False
-        load_textures(universe, self)
+        #load_textures(universe, self)
 
     def moveCamera(self):
         glMatrixMode(GL_PROJECTION)

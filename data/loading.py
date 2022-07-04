@@ -8,12 +8,36 @@ onto spheroids or other uses. This is where the majority of start up time is tak
 
 import concurrent.futures
 import multiprocessing
+import pyglet
 from OpenGL.GL import *
-from OpenGL.GLU import gluNewQuadric, gluQuadricTexture
+from OpenGL.GLU import *
 from PIL import Image
 import numpy as np
 import time
 import os
+
+def loading_screen(universe, camera):
+    camera.window.clear()
+    loading_text = pyglet.text.Label(
+        'Loading Textures',
+        font_name='CMU Bright Roman',
+        font_size=32,
+        width = 500,
+        color = (0, 239, 255, 255),
+        multiline = True,
+        anchor_y='top')
+    loading_text.anchor_x = 'center'
+    loading_text.x = -camera.halfwidth*0
+    loading_text.y = camera.halfheight*0.1
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    gluOrtho2D(-camera.halfwidth, camera.halfwidth, -camera.halfheight, camera.halfheight)
+    loading_text.draw()
+    if camera.screenstate == 1:
+        load_textures(universe, camera)
+    camera.screenstate += 1
+    glFlush()
+    print(time.time())
 
 def load_textures(universe, camera):
     ''' Manager to load textures using multithreading to reduce startup time.
@@ -51,7 +75,7 @@ def load_textures(universe, camera):
 
             ''' Assign the textures to their respective objects '''
             if imported_tex[2] == 'GalaxyLR':
-                camera.background.star_texture = mapped_texture 
+                camera.background.star_texture = mapped_texture
             for body in universe.bodies:
                 if body.texture == imported_tex[2]:
                     body.texture = mapped_texture
