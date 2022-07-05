@@ -5,8 +5,9 @@ class HUD:
     def __init__(self, universe, camera):
         self.timestep_label = DataLabel(camera,-0.99,0.93)
         self.timestamp_label = DataLabel(camera,-0.99,0.98)
-        self.sprite = pyglet.sprite.Sprite(pyglet.image.load('data/sprites/timebackground.png'), x=-camera.halfwidth-100, y=camera.halfheight-55)
-        self.sprite.scale = 0.08
+        #self.sprite = pyglet.sprite.Sprite(pyglet.image.load('data/sprites/timebackground.png'), x=-camera.halfwidth-100, y=camera.halfheight-55)
+        self.sprite = pyglet.sprite.Sprite(pyglet.resource.animation('data/sprites/catjam.gif'), x=camera.halfwidth*-1, y=camera.halfheight*0.5)
+        self.sprite.scale = 0.3
 
     def draw(self, universe, camera):
         self.timestep_label.text.text = f'Rate: {str(timedelta(seconds=universe.usertime))} /s'
