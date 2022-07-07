@@ -16,17 +16,20 @@ import numpy as np
 import time
 import os
 
-def loading_screen(universe, camera):
+def loading_screen(dt,universe,camera,frame):
     camera.window.clear()
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
     gluOrtho2D(-camera.halfwidth, camera.halfwidth, -camera.halfheight, camera.halfheight)
     camera.loadingscreen.draw()
-    if camera.screenstate == 1:
+    if camera.screenstate:
         universe.populate()
         camera.populate(universe)
         load_textures(universe, camera)
-    camera.screenstate += 1
+        pyglet.clock.unschedule(loading_screen)
+        pyglet.clock.schedule(frame,universe,camera)
+    else:
+        camera.screenstate = True
     glFlush()
 
 def load_textures(universe, camera):

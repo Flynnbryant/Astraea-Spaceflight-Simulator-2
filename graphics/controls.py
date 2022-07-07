@@ -1,9 +1,9 @@
 import numpy as np
 import time
 import pyglet
-from interface.prioritiser import *
+from graphics.prioritiser import *
 from spacecraft.node import *
-from interface.mouse import *
+from graphics.mouse import *
 
 def key_controls(universe, camera, dt):
     camera.window.push_handlers(camera.keys)

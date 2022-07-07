@@ -1,18 +1,17 @@
 import numpy as np
 import time
 from mechanics.entity import *
-from mechanics.utilities import *
 from mechanics.rotations import *
 from graphics.trace import *
 from graphics.spheroid import *
 from graphics.rings import *
+from graphics.labels import *
 from mechanics.centres import *
 
 class Body(Entity):
     def __init__(self, data, universe, focus):
         self.bodycentre, self.barycentre = create_centres(self, sn(data[10]), universe.grav_constant)
         super().__init__(data, universe, focus)
-        self.labelbatch = LabelBatch()
         mass_scale = 0.0001*np.log10(self.bodycentre.mass)
 
         if self.primary:
@@ -22,9 +21,9 @@ class Body(Entity):
             self.primary.object.barycentre.inverse_SGP = 1/self.primary.object.barycentre.SGP
             self.primary.object.barycentre.inverse_mass = 1/self.primary.object.barycentre.mass
             self.trace = Trace(self, 52, True)
-            self.label = EntityLabel(self, width = mass_scale, height = 20*mass_scale, labelbatch = self.primary.object.labelbatch)
+            self.label = EntityLabel(self, width = mass_scale, height = 20*mass_scale)
         else:
-            self.label = EntityLabel(self, width = mass_scale, height = 20*mass_scale, labelbatch = self.labelbatch)
+            self.label = EntityLabel(self, width = mass_scale, height = 20*mass_scale)
             universe.star = self
             self.hill = np.Inf
             self.SOI = np.Inf
@@ -49,3 +48,10 @@ class Body(Entity):
         self.SOI = self.semi_major_axis*(self.barycentre.mass/self.primary.mass)**(0.4)
         self.outer_label_distance = self.semi_major_axis * np.log10(self.mean_radius)
         self.inner_label_distance = 0.05 * self.outer_label_distance
+
+def major_siblings(body):
+    major_siblings = []
+    for sibling in body.primary.object.satellites:
+        if sibling is not body and sibling.barycentre.mass > 1e20:
+            major_siblings.append(sibling)
+    return major_siblings

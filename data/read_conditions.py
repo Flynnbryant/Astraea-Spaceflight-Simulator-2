@@ -1,7 +1,6 @@
 import numpy as np
-from mechanics.utilities import *
-from mechanics.elliptical_elements import *
-from mechanics.hyperbolic_elements import *
+from mechanics.orbit import *
+from mechanics.rotations import *
 
 def read_initial_elements(entity, data, universe):
     elements = data[6].split(',')
@@ -28,3 +27,7 @@ def read_initial_state(entity, data, universe):
     entity.bodycentre.rvel = 1000*np.array([sn(elements[5]),sn(elements[6]),sn(elements[7])])
     state_to_elliptical_elements(entity, entity.bodycentre, universe.time)
     rotation_constants(entity)
+
+def sn(datastr):
+    datalist = datastr.replace(',','').lower().split('e')
+    return np.float64(datalist[0])*10**int(datalist[1])

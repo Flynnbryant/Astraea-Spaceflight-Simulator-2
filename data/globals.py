@@ -2,7 +2,7 @@
 globals.py
 
 Creating global objects for the universe, window, and camera classes.
-This is particularly useful for the window class of type Interface,
+This is particularly useful for the window class of type Mouse,
 which inherits mouse movements and actions from pyglet.window.Window.
 
 Each function passes on the initialisation call and sets the resulting
@@ -12,7 +12,7 @@ object to global.
 import pyglet
 from data.universe import *
 from graphics.camera import *
-from interface.mouse import *
+from graphics.mouse import *
 
 def init_universe(*args, **kwargs):
     global universe
@@ -21,7 +21,7 @@ def init_universe(*args, **kwargs):
 
 def init_window(*args, **kwargs):
     global window
-    window = Interface(*args, **kwargs)
+    window = Mouse(*args, **kwargs)
     return window
 
 def init_camera(*args, **kwargs):

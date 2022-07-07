@@ -2,14 +2,11 @@ import numpy as np
 import time
 import csv
 
-from graphics.labels import *
-
 from analysis.profile import *
 from spacecraft.node import *
 from mechanics.body import *
 from mechanics.entity import *
 from spacecraft.vessel import *
-from mechanics.utilities import *
 
 class Universe:
     def __init__(self, focus, profiler):

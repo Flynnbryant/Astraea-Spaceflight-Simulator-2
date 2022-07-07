@@ -3,7 +3,6 @@ from mechanics.body import *
 from spacecraft.vessel import *
 from analysis.profile import *
 from graphics.labels import *
-from interface.utilities import *
 from graphics.scene import *
 
 def update_zoom(universe, camera, modifier, focus_change=False):
@@ -17,10 +16,10 @@ def update_zoom(universe, camera, modifier, focus_change=False):
     camera.planetary_view = camera.camera_distance<consistent.hill
 
     if camera.planetary_view:
-        render_detail(camera, universe, consistent)
+        consistent.spheroid.calculate_render_detail(universe, camera)
         for object in consistent.satellites:
             specific_strength(camera, universe, object, global_strength)
-            render_detail(camera, universe, object)
+            object.spheroid.calculate_render_detail(universe, camera)
     else:
         for object in universe.star.satellites:
             specific_strength(camera, universe, object, global_strength)
@@ -43,3 +42,16 @@ def update_fov(universe, camera, modifier=1, value=None):
         camera.fov = value
     camera.fov *= modifier
     update_zoom(universe, camera, 1)
+
+def specific_strength(camera, universe, object, global_strength):
+    if object is universe.focus_entity:
+        object.specific_strength = 1
+    else:
+        if object.primary is universe.focus_entity.primary:
+            distance = max(universe.focus_entity.semi_major_axis,camera.camera_distance-object.semi_major_axis)
+        else:
+            distance = camera.camera_distance
+        inner_strength = 2*distance/object.inner_label_distance - 1
+        outer_strength = 2 - distance/object.outer_label_distance
+        object.specific_strength = np.clip(min([inner_strength,outer_strength,global_strength]),0,1)
+    object.label.recalculate_color()

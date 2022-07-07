@@ -23,10 +23,14 @@ class Lighting:
 
 class Flare:
     def __init__(self):
-        pass
+        self.flaresprite = pyglet.sprite.Sprite(pyglet.image.load('data/sprites/sol_flare.png'), x=0, y=0)
 
     def draw(self, universe, camera):
-        pass
+        self.flaresprite.x = 0.0*camera.halfwidth
+        self.flaresprite.y = 0.0*camera.halfheight
+        self.flaresprite.scale = 0.1
+        #self.flaresprite.draw()
+        glEnable(GL_DEPTH_TEST)
 
 def update_flux(universe, camera):
     background_strength = 0.8

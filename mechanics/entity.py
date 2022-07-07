@@ -3,9 +3,7 @@ import statistics
 import time
 
 from data.read_conditions import *
-from mechanics.elliptical_elements import *
-from mechanics.hyperbolic_elements import *
-from mechanics.utilities import *
+from mechanics.orbit import *
 from graphics.labels import *
 from graphics.trace import *
 from mechanics.centres import *

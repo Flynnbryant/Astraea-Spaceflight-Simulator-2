@@ -5,9 +5,8 @@ from data.loading import *
 from graphics.trace import *
 from graphics.labels import *
 from graphics.rings import *
-from interface.prioritiser import *
+from graphics.prioritiser import *
 from graphics.lighting import *
-from interface.utilities import *
 import numpy as np
 import time
 
@@ -30,11 +29,11 @@ def update_features(universe, camera, focus_change = False):
     camera.spheroids = []
     camera.traces = []
     camera.labels = [DrawProfile('tra')]
-    camera.draw_features = [camera.HUD, DrawProfile('hud'), camera.light, camera.flare, DrawProfile('lig')]
+    camera.draw_features = [camera.HUD, DrawProfile('hud'), camera.flare, camera.light, DrawProfile('lig')]
     if camera.planetary_view:
         for object in [universe.focus_entity.local_planet] + universe.focus_entity.local_planet.satellites:
             if object.specific_strength > 0:
-                if object.render_detail > 0:
+                if object.spheroid.render_detail > 0:
                     camera.spheroids.append(object.spheroid)
                 if object.rings:
                     camera.labels.append(object.rings)

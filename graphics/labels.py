@@ -3,22 +3,13 @@ import pyglet
 import numpy as np
 from OpenGL.GL import *
 from OpenGL.GLU import *
-from interface.utilities import *
-
-class LabelBatch:
-    def __init__(self):
-        self.batch = pyglet.graphics.Batch()
-
-    def draw(self, universe, camera):
-        self.batch.draw()
 
 class EntityLabel:
-    def __init__(self, entity, width, height, labelbatch):
+    def __init__(self, entity, width, height):
         pyglet.font.add_directory('data/font')
         self.entity = entity
         self.triangle_width = width
         self.triangle_height = height
-        self.batch = labelbatch.batch
         self.text = pyglet.text.Label(
             entity.name,
             font_name='CMU Bright Roman',
@@ -27,8 +18,7 @@ class EntityLabel:
             width=20,
             height=10,
             align='center',
-            anchor_x='center', anchor_y='bottom',
-            batch = self.batch)
+            anchor_x='center', anchor_y='bottom')
         self.text.content_valign = 'bottom'
         if self.entity.name == 'Spacecraft':
             self.altitude = pyglet.text.Label(
@@ -39,8 +29,7 @@ class EntityLabel:
                 width=20,
                 height=10,
                 align='center',
-                anchor_x='center', anchor_y='bottom',
-                batch = self.batch)
+                anchor_x='center', anchor_y='bottom')
             self.velocity = pyglet.text.Label(
                 entity.name,
                 font_name='CMU Bright Roman',
@@ -49,8 +38,7 @@ class EntityLabel:
                 width=20,
                 height=10,
                 align='center',
-                anchor_x='center', anchor_y='bottom',
-                batch = self.batch)
+                anchor_x='center', anchor_y='bottom')
 
     def regenerate_label(self):
         self.text = pyglet.text.Label(
@@ -61,8 +49,7 @@ class EntityLabel:
             width=20,
             height=10,
             align='center',
-            anchor_x='center', anchor_y='bottom',
-            batch = self.batch)
+            anchor_x='center', anchor_y='bottom')
 
     def recalculate_color(self):
         self.text.color = (*(self.entity.color*self.entity.specific_strength).astype(int), 255)
@@ -71,7 +58,7 @@ class EntityLabel:
         glMatrixMode(GL_MODELVIEW)
         glDisable(GL_DEPTH_TEST)
         camera.moveCamera()
-        pos = model_to_projection(camera, self.entity.bodycentre.apos + [0.,0.,self.entity.mean_radius])
+        pos = camera.model_to_projection(self.entity.bodycentre.apos + [0.,0.,self.entity.mean_radius])
         glDisable(GL_LIGHTING)
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
@@ -83,9 +70,10 @@ class EntityLabel:
         glEnd()
         gluOrtho2D(-camera.halfwidth, camera.halfwidth, -camera.halfheight, camera.halfheight)
 
-        if pos[2] < 1: # Prevents labels from being drawn when they are behind the camera.
+        y_ratio = (pos[1]+self.triangle_height+0.02)
+        if pos[2] < 1 and y_ratio < 0.9: # Prevents labels from being drawn when they are behind the camera.
             self.text.x=pos[0]*camera.halfwidth
-            self.text.y=(pos[1]+self.triangle_height+0.02)*camera.halfheight
+            self.text.y=y_ratio*camera.halfheight
             self.text.draw()
             if self.entity.name == 'Spacecraft':
                 self.altitude.x = (pos[0])*camera.halfwidth

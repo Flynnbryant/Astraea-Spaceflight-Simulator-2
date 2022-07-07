@@ -1,9 +1,7 @@
 import time
 import numpy as np
 from OpenGL.GL import *
-from mechanics.elliptical_elements import *
-from mechanics.hyperbolic_elements import *
-#from spacecraft.vessel import *
+from mechanics.orbit import *
 
 class Trace:
     def __init__(self, entity, bodylength, vesseltype):

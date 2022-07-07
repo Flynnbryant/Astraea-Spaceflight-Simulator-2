@@ -1,5 +1,4 @@
 import numpy as np
-from mechanics.utilities import *
 
 def create_centres(object, mass, grav_constant):
     SGP = mass*grav_constant
@@ -7,8 +6,8 @@ def create_centres(object, mass, grav_constant):
 
 class Centre():
     def __init__(self, object, mass, SGP):
-        self.apos = new_vector()
-        self.rpos = new_vector()
+        self.apos = np.array([0.,0.,0.],dtype=np.float64)
+        self.rpos = np.array([0.,0.,0.],dtype=np.float64)
         self.object = object
         self.satellites = []
         self.mass = mass
@@ -19,8 +18,8 @@ class Centre():
 class Barycentre(Centre):
     def __init__(self, object, mass, SGP):
         super().__init__(object, mass, SGP)
-        self.ppos = new_vector()
-        self.pvel = new_vector()
+        self.ppos = np.array([0.,0.,0.],dtype=np.float64)
+        self.pvel = np.array([0.,0.,0.],dtype=np.float64)
 
     def pv_vec(self, centre, sibling):
         return sibling.primary.bary_request_pv_vec(centre, sibling)

@@ -4,22 +4,19 @@ from OpenGL.GLU import *
 from ctypes import *
 import pyglet
 import numpy as np
-from interface.controls import *
+from graphics.controls import *
 from data.loading import *
 from graphics.trace import *
 from graphics.rings import *
-from interface.prioritiser import *
+from graphics.prioritiser import *
 from graphics.lighting import *
-from graphics.background import *
-from interface.utilities import *
-from interface.telemetry import *
+from graphics.spheroid import *
+from graphics.HUD_UI import *
 
 class Camera:
     def __init__(self, window, keys, universe):
-        glEnable(GL_DEPTH_TEST)
         glMatrixMode(GL_MODELVIEW)
-        glLoadIdentity()
-        self.screenstate = 0
+        self.screenstate = False
         self.keys = keys
         self.window = window
         self.halfwidth = self.window.width//2
@@ -62,3 +59,13 @@ class Camera:
         glRotatef(self.vertical_rot, 1, 0, 0)
         glRotatef(self.horizontal_rot, 0, 0, 1)
         glScalef(self.scale_factor, self.scale_factor, self.scale_factor)
+
+    def model_to_projection(self, apos):
+        coordinate_array = np.array([*apos,1])
+        proj = np.dot(coordinate_array, glGetFloatv(GL_PROJECTION_MATRIX))
+        return np.array([proj[0],proj[1],proj[2]])/proj[3]
+
+    def projection_to_model(self):
+        pos = self.pos*self.inverse_scale_factor
+        modelview_matrix = glGetFloatv(GL_PROJECTION_MATRIX)
+        return pos

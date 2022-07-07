@@ -6,8 +6,7 @@ class Vessel(Entity):
         self.bodycentre = Vesselcentre(self)
         self.barycentre = Blankcentre()
         super().__init__(data, universe, focus)
-        self.labelbatch = LabelBatch()
-        self.label = EntityLabel(self, width = 0.008, height = 0.03, labelbatch = self.labelbatch)
+        self.label = EntityLabel(self, width = 0.008, height = 0.03)
         universe.vessels.append(self)
         self.trace = Trace(self, 52, True)
 
@@ -18,10 +17,10 @@ class Vessel(Entity):
 class Vesselcentre():
     def __init__(self, object):
         self.object = object
-        self.apos = new_vector()
-        self.rpos = new_vector()
-        self.pvel = new_vector()
+        self.apos = np.array([0.,0.,0.],dtype=np.float64)
+        self.rpos = np.array([0.,0.,0.],dtype=np.float64)
+        self.pvel = np.array([0.,0.,0.],dtype=np.float64)
 
 class Blankcentre():
     def __init__(self):
-        self.apos = new_vector()
+        self.apos = np.array([0.,0.,0.],dtype=np.float64)

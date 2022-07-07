@@ -1,22 +1,24 @@
 import pyglet
 import numpy as np
-from interface.prioritiser import *
+from graphics.prioritiser import *
 import data.globals
-from interface.utilities import *
 
-class Interface(pyglet.window.Window):
+class Mouse(pyglet.window.Window):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.set_icon(pyglet.image.load('data/textures/icon.png'))
         self.dragging = False
 
+    def mouse_precision(self, x, a, b):
+        return a*b*(-x/(b+x**2) + x/b)
+
     def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
-        update_zoom(data.globals.universe, data.globals.camera, (1+mouse_precision(scroll_y, 0.05, 1)))
+        update_zoom(data.globals.universe, data.globals.camera, (1+self.mouse_precision(scroll_y, 0.05, 1)))
 
     def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
         self.dragging = True
-        data.globals.camera.vertical_rot = np.clip(data.globals.camera.vertical_rot -mouse_precision(dy, 0.5, 100), -180, 0)
-        data.globals.camera.horizontal_rot += mouse_precision(dx, 0.5, 100)
+        data.globals.camera.vertical_rot = np.clip(data.globals.camera.vertical_rot -self.mouse_precision(dy, 0.5, 100), -180, 0)
+        data.globals.camera.horizontal_rot += self.mouse_precision(dx, 0.5, 100)
 
     def on_mouse_press(self, x, y, button, modifiers):
         self.dragging = False
