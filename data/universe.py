@@ -14,7 +14,6 @@ class Universe:
         self.focusinput = focus
 
     def populate(self):
-        self.nodes = [Node(False,253399708800)]
         self.grav_constant = 6.67430*10**-11
         self.c = 299792458
         self.time = 1640995200 #Unix time for 2022 Jan 1st 00:00, the simulation start point

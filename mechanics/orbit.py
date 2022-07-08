@@ -11,6 +11,21 @@ class Orbit:
     def __init__(self, entity):
         self.entity = entity
 
+    def elements_to_pos(self, mean_anomaly):
+        pass
+
+    def elements_to_vel(self):
+        pass
+
+    def state_to_elements(self, centre, timev):
+        pass
+
+    def hyperbollic_elements_to_pos(self, mean_anomaly):
+        pass
+
+    def hyperbollic_elements_to_vel(self):
+        pass
+
 def elliptical_elements_to_pos(entity, mean_anomaly):
     entity.eccentric_anomaly = brentq(eccentric_anomaly,-0.1,6.3,args=(entity.eccentricity, mean_anomaly),xtol=1e-8)
     entity.true_anomaly = 2*np.arctan2(entity.sqrtp*np.sin(0.5*entity.eccentric_anomaly),entity.sqrtm*np.cos(0.5*entity.eccentric_anomaly))

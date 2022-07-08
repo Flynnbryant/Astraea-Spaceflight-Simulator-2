@@ -28,7 +28,7 @@ class Camera:
     def populate(self, universe):
         self.perspective = self.window.width/self.window.height
         self.pos = np.array([0., 0., -2.])
-        self.camera_distance = 1e8
+        self.camera_distance = 1e9
         self.horizontal_rot = 180.1
         self.vertical_rot = -75.1
         self.tilt = 0

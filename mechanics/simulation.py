@@ -8,20 +8,21 @@ from mechanics.body import *
 from spacecraft.vessel import *
 from mechanics.pertubations import *
 
-def simulation(universe, dt):
+def simulation(universe, camera, dt):
     universe.profile.add('buf')
-    universe.timestep = (universe.usertime*dt if dt < 0.1 else 0)
+    universe.timestep = (universe.usertime*dt if dt < 0.2 else 0)
 
     osculating_orbits(universe)
-    perturb_bodies(universe)
-    perturb_vessels(universe)
+    perturbations(universe)
+    recenter(universe)
+    rectify(universe,camera)
 
     universe.time += universe.timestep
     universe.framecount += 1
-    if universe.nodes[0].time < universe.time:
-        universe.nodes[0].run(universe)
-        universe.nodes.pop(0)
-    universe.profile.add('ves')
+    for vessel in universe.vessels:
+        if vessel.nodes[0].time < universe.time:
+            vessel.nodes[0].run(universe)
+            vessel.nodes.pop(0)
 
 def osculating_orbits(universe):
     ''' Begin by assuming a perfect elliptical osculating orbit for each object. '''
@@ -34,3 +35,22 @@ def osculating_orbits(universe):
         planet.bodycentre.rpos = -planet.bodycentre.inverse_mass*sum((moon.barycentre.rpos * moon.barycentre.mass) for moon in planet.barycentre.satellites)
     universe.star.bodycentre.rpos = -universe.star.bodycentre.inverse_mass*sum((planet.barycentre.rpos * planet.barycentre.mass) for planet in universe.star.barycentre.satellites)
     universe.profile.add('osc')
+
+def recenter(universe):
+    universe.star.bodycentre.apos = universe.star.barycentre.apos + universe.star.bodycentre.rpos
+    for planet in universe.star.satellites:
+        planet.barycentre.apos = planet.barycentre.rpos + planet.primary.apos
+        planet.bodycentre.apos = planet.bodycentre.rpos + planet.barycentre.apos
+        for moon in planet.satellites:
+            moon.bodycentre.apos = moon.barycentre.rpos + moon.primary.apos
+    #for body in universe.bodies[1:]:
+    #    body.barycentre.apos = body.barycentre.rpos + body.primary.apos
+    #    body.bodycentre.apos = body.bodycentre.rpos + body.barycentre.apos
+    for vessel in universe.vessels:
+        vessel.bodycentre.rpos = vessel.barycentre.rpos
+        vessel.bodycentre.apos = vessel.barycentre.rpos + vessel.primary.apos
+    subtract = -universe.focus_entity.bodycentre.apos
+    for entity in universe.entities:
+        entity.bodycentre.apos += subtract
+        entity.barycentre.apos += subtract
+    universe.profile.add('ree')

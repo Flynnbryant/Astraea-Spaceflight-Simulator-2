@@ -35,7 +35,7 @@ class Mouse(pyglet.window.Window):
 
             for object in consider:
                 if data.globals.camera.camera_distance < object.outer_label_distance:
-                    centre = model_to_projection(data.globals.camera, object.bodycentre.apos)
+                    centre = data.globals.camera.model_to_projection(object.bodycentre.apos)
                     print(data.globals.camera.cinematic_view, object.bodycentre.apos)
                     ''' This centre is different when in cinematic mode'''
                     ''' Try drawing one label to see if labels change too, or if something about having to draw a label resets it '''
