@@ -13,10 +13,10 @@ from mechanics.simulation import *
 def frame(dt,universe,camera):
     simulation(universe,camera,dt)
     drawScene(universe,camera)
-    key_controls(universe,camera,dt)
+    #key_controls(universe,camera,dt)
     universe.profile.output(dt)
 
-universe = init_universe(focus='Saturn',profiler=True)
+universe = init_universe(focus='Saturn',profiler=False)
 window = init_window(1920,1080,caption=title,resizable=True,vsync=0)
 camera = init_camera(window,pyglet.window.key.KeyStateHandler(),universe)
 

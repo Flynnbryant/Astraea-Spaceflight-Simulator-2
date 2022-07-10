@@ -25,7 +25,7 @@ def update_zoom(universe, camera, modifier, focus_change=False):
             specific_strength(camera, universe, object, global_strength)
 
     consistent.specific_strength = 1
-    consistent.label.recalculate_color()
+    consistent.label.text.color = (*(consistent.color*consistent.specific_strength).astype(int), 255)
 
     update_features(universe, camera, focus_change)
 
@@ -54,4 +54,4 @@ def specific_strength(camera, universe, object, global_strength):
         inner_strength = 2*distance/object.inner_label_distance - 1
         outer_strength = 2 - distance/object.outer_label_distance
         object.specific_strength = np.clip(min([inner_strength,outer_strength,global_strength]),0,1)
-    object.label.recalculate_color()
+    object.label.text.color = (*(object.color*object.specific_strength).astype(int), 255)

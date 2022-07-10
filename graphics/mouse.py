@@ -1,6 +1,7 @@
 import pyglet
 import numpy as np
 from graphics.prioritiser import *
+from graphics.HUD_UI import *
 import data.globals
 
 class Mouse(pyglet.window.Window):
@@ -22,23 +23,30 @@ class Mouse(pyglet.window.Window):
 
     def on_mouse_press(self, x, y, button, modifiers):
         self.dragging = False
+        self.scaledx = (x-data.globals.camera.halfwidth)*data.globals.camera.invhalfwidth
+        self.scaledy = (y-data.globals.camera.halfheight)*data.globals.camera.invhalfheight
+        if self.scaledy < -0.73:
+            data.globals.camera.HUD.press_interaction(self.scaledx, self.scaledy, button, modifiers)
 
     def on_mouse_release(self, x, y, button, modifiers):
+        self.scaledx = (x-data.globals.camera.halfwidth)*data.globals.camera.invhalfwidth
+        self.scaledy = (y-data.globals.camera.halfheight)*data.globals.camera.invhalfheight
+        data.globals.camera.HUD.release_interaction(self.scaledx, self.scaledy, button, modifiers)
         if not self.dragging:
-            scaledx = (x-data.globals.camera.halfwidth)*data.globals.camera.invhalfwidth
-            scaledy = (y-data.globals.camera.halfheight)*data.globals.camera.invhalfheight
+            if self.scaledy > -0.73:
+                self.select_object()
 
-            if data.globals.camera.planetary_view:
-                consider = [data.globals.universe.focus_entity.local_planet] + data.globals.universe.focus_entity.local_planet.satellites
-            else:
-                consider = data.globals.universe.star.satellites
+    def select_object(self):
+        if data.globals.camera.planetary_view:
+            consider = [data.globals.universe.focus_entity.local_planet] + data.globals.universe.focus_entity.local_planet.satellites
+        else:
+            consider = data.globals.universe.star.satellites
 
-            for object in consider:
-                if data.globals.camera.camera_distance < object.outer_label_distance:
-                    centre = data.globals.camera.model_to_projection(object.bodycentre.apos)
-                    print(data.globals.camera.cinematic_view, object.bodycentre.apos)
-                    ''' This centre is different when in cinematic mode'''
-                    ''' Try drawing one label to see if labels change too, or if something about having to draw a label resets it '''
-                    if np.abs(centre[0]-scaledx) < 0.02 and np.abs(centre[1]-scaledy) < 0.1:
-                        data.globals.universe.focus = object.focus_num
-                        data.globals.universe.focus_entity = object
+        for object in consider:
+            if data.globals.camera.camera_distance < object.outer_label_distance:
+                centre = data.globals.camera.model_to_projection(object.bodycentre.apos)
+                ''' This centre is different when in cinematic mode'''
+                ''' Try drawing one label to see if labels change too, or if something about having to draw a label resets it '''
+                if np.abs(centre[0]-self.scaledx) < 0.02 and np.abs(centre[1]-self.scaledy) < 0.1:
+                    data.globals.universe.focus = object.focus_num
+                    data.globals.universe.focus_entity = object

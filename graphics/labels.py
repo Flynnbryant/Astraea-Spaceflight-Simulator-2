@@ -20,25 +20,6 @@ class EntityLabel:
             align='center',
             anchor_x='center', anchor_y='bottom')
         self.text.content_valign = 'bottom'
-        if self.entity.name == 'Spacecraft':
-            self.altitude = pyglet.text.Label(
-                entity.name,
-                font_name='CMU Bright Roman',
-                font_size=8,
-                color = (*(self.entity.color).astype(int), int(255*self.entity.specific_strength)),
-                width=20,
-                height=10,
-                align='center',
-                anchor_x='center', anchor_y='bottom')
-            self.velocity = pyglet.text.Label(
-                entity.name,
-                font_name='CMU Bright Roman',
-                font_size=8,
-                color = (*(self.entity.color).astype(int), int(255*self.entity.specific_strength)),
-                width=20,
-                height=10,
-                align='center',
-                anchor_x='center', anchor_y='bottom')
 
     def regenerate_label(self):
         self.text = pyglet.text.Label(
@@ -51,9 +32,6 @@ class EntityLabel:
             align='center',
             anchor_x='center', anchor_y='bottom')
 
-    def recalculate_color(self):
-        self.text.color = (*(self.entity.color*self.entity.specific_strength).astype(int), 255)
-
     def draw(self, universe, camera):
         glMatrixMode(GL_MODELVIEW)
         glDisable(GL_DEPTH_TEST)
@@ -61,29 +39,35 @@ class EntityLabel:
         pos = camera.model_to_projection(self.entity.bodycentre.apos + [0.,0.,self.entity.mean_radius])
         glDisable(GL_LIGHTING)
         glMatrixMode(GL_PROJECTION)
-        glLoadIdentity()
-        glColor3f(*(self.entity.colorsmall*self.entity.specific_strength))
-        glBegin(GL_TRIANGLES) # Speed up
-        glVertex3f(*pos)
-        glVertex3f(pos[0]-self.triangle_width, pos[1]+self.triangle_height, pos[2])
-        glVertex3f(pos[0]+self.triangle_width, pos[1]+self.triangle_height, pos[2])
-        glEnd()
+        if pos[1] > -0.73:
+            glLoadIdentity()
+            glColor3f(*(self.entity.colorsmall*self.entity.specific_strength))
+            glBegin(GL_TRIANGLES) # Speed up
+            glVertex3f(*pos)
+            glVertex3f(pos[0]-self.triangle_width, pos[1]+self.triangle_height, pos[2])
+            glVertex3f(pos[0]+self.triangle_width, pos[1]+self.triangle_height, pos[2])
+            glEnd()
+
         gluOrtho2D(-camera.halfwidth, camera.halfwidth, -camera.halfheight, camera.halfheight)
-
-        y_ratio = (pos[1]+self.triangle_height+0.02)
-        if pos[2] < 1 and y_ratio < 0.9: # Prevents labels from being drawn when they are behind the camera.
+        if pos[2] < 1 and pos[1] > -0.73: # Prevents labels from being drawn when they are behind the camera.
             self.text.x=pos[0]*camera.halfwidth
-            self.text.y=y_ratio*camera.halfheight
+            self.text.y=(pos[1]+self.triangle_height+0.02)*camera.halfheight
             self.text.draw()
-            if self.entity.name == 'Spacecraft':
-                self.altitude.x = (pos[0])*camera.halfwidth
-                self.altitude.y = (pos[1]+self.triangle_height+0.045)*camera.halfheight
-                self.altitude.text = str(round(self.entity.rel_dist/1000,3))+'km'
-                self.altitude.draw()
-
-                self.velocity.x = (pos[0])*camera.halfwidth
-                self.velocity.y = (pos[1]+self.triangle_height+0.07)*camera.halfheight
-                self.velocity.text = str(round(np.linalg.norm(self.entity.bodycentre.rvel),3))+'m/s'
-                self.velocity.draw()
-
         glEnable(GL_DEPTH_TEST)
+
+class DataLabel:
+    def __init__(self, camera, x, y, batch, group):
+        pyglet.font.add_directory('data/font')
+        self.text = pyglet.text.Label(
+            '###TEMP###',
+            font_name='CMU Bright Roman',
+            font_size=12,
+            width = 5000,
+            color = (0, 239, 255, 255),
+            multiline = True,
+            anchor_y='top',
+            batch = batch,
+            group=group)
+        self.text.anchor_x = 'left'
+        self.text.x = camera.halfwidth*x
+        self.text.y = camera.halfheight*y

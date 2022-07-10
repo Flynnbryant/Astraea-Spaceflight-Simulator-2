@@ -7,7 +7,7 @@ from spacecraft.vessel import *
 def perturbations(universe):
     ''' loop through all bodies and vessels, applying pertubations if the timestep is sufficiently small to be more accurate than not considering them '''
     for entity in universe.entities[1:]:
-        if universe.timestep < 0.02*entity.period and False:
+        if universe.timestep < 0.02*entity.period:
 
             ''' Apply pertubations from its grandparent, if it has one. E.g. sun to moon.'''
             if entity.primary.object.primary:
@@ -17,15 +17,19 @@ def perturbations(universe):
             ''' Include a term for notable piblings '''
 
             ''' Correct for parent error '''
-            if entity.isbarycentric:
+            #if entity.isbarycentric:
+
+            if isinstance(entity.primary, Barycentre):
                 true_vec = entity.primary.object.bodycentre.rpos-entity.barycentre.rpos
                 entity.barycentre.pvel += universe.timestep*entity.primary.object.bodycentre.SGP*((true_vec/np.linalg.norm(true_vec)**3) + (entity.barycentre.rpos/np.linalg.norm(entity.barycentre.rpos)**3))
-
+            
             ''' Apply pertubations from relevant siblings (bodies orbiting around the same parent) '''
+            '''
             for sibling in entity.major_siblings:
                 pvvec = 0.
                 psvec = 0.
                 entity.barycentre.pvel += universe.timestep*sibling.barycentre.SGP*(0)
+            '''
 
             ''' Update true positions due to pertubations '''
             entity.barycentre.ppos += entity.barycentre.pvel*universe.timestep
@@ -89,5 +93,5 @@ def rectify(universe, camera):
         vessel.primary.check_model(universe, vessel)
         state_to_elliptical_elements(vessel, vessel.bodycentre, universe.time)
         vessel.trace.calculate_trace()
-        vessel.bodycentre.pvel = np.array([0.,0.,0.],dtype=np.float64)
+        vessel.barycentre.pvel = np.array([0.,0.,0.],dtype=np.float64)
     universe.profile.add('ret')
