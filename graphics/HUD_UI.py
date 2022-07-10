@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 
 from graphics.labels import *
 from spacecraft.node import *
+from graphics.prioritiser import *
 
 class HUD:
     def __init__(self, universe, camera):
@@ -14,7 +15,7 @@ class HUD:
         self.background = pyglet.graphics.OrderedGroup(1)
         self.timestep_label = DataLabel(camera,-0.9,-0.75,self.HUDBatch,self.foreground)
         self.timestamp_label = DataLabel(camera,-0.98,-0.938,self.HUDBatch,self.foreground)
-        self.sprite = pyglet.sprite.Sprite(pyglet.image.load('data/sprites/UI1_Spacecraft.png'), x=-camera.halfwidth*1, y=-camera.halfheight*1.05, batch=self.HUDBatch, group=self.background)
+        self.sprite = pyglet.sprite.Sprite(pyglet.image.load('data/sprites/UI2_Spacecraft.png'), x=-camera.halfwidth*1, y=-camera.halfheight*1.05, batch=self.HUDBatch, group=self.background)
         #self.sprite = pyglet.sprite.Sprite(pyglet.resource.animation('data/sprites/catjam.gif'), x=camera.halfwidth*-1, y=camera.halfheight*0.5)
         self.sprite.scale = 0.75
         self.current_actions = {
@@ -40,23 +41,23 @@ class HUD:
         elif self.current_actions['decrease_timestep']:
             self.universe.usertime = max(self.universe.usertime*(0.95), 1)
         if self.current_actions['prograde']:
-            prograde(self.universe, self.universe.vessels[0], min(self.universe.timestep,np.linalg.norm(self.universe.vessels[0].bodycentre.rvel*1)))
+            prograde(self.universe, self.universe.vessels[0], 9.81*self.universe.timestep)
         elif self.current_actions['retrograde']:
-            prograde(self.universe, self.universe.vessels[0], max(-self.universe.timestep,-np.linalg.norm(self.universe.vessels[0].bodycentre.rvel*1)))
+            prograde(self.universe, self.universe.vessels[0], -9.81*self.universe.timestep)
         elif self.current_actions['normal']:
-            normal(self.universe, self.universe.vessels[0], min(self.universe.timestep,np.linalg.norm(self.universe.vessels[0].bodycentre.rvel*1)))
+            normal(self.universe, self.universe.vessels[0], 9.81*self.universe.timestep)
         elif self.current_actions['antinormal']:
-            normal(self.universe, self.universe.vessels[0], max(-self.universe.timestep,-np.linalg.norm(self.universe.vessels[0].bodycentre.rvel*1)))
+            normal(self.universe, self.universe.vessels[0], -9.81*self.universe.timestep)
         elif self.current_actions['radialin']:
-            radial(self.universe, self.universe.vessels[0], min(-self.universe.timestep,-np.linalg.norm(self.universe.vessels[0].bodycentre.rvel*1)))
+            radial(self.universe, self.universe.vessels[0], -9.81*self.universe.timestep)
         elif self.current_actions['radialout']:
-            radial(self.universe, self.universe.vessels[0], max(self.universe.timestep,np.linalg.norm(self.universe.vessels[0].bodycentre.rvel*1)))
+            radial(self.universe, self.universe.vessels[0], 9.81*self.universe.timestep)
 
-    def press_interaction(self, x, y, button, modifiers):
+    def press_interaction(self, camera, x, y, button, modifiers):
         if x <-0.7:
             self.time_control(x)
         else:
-            self.mode(x, y, button, modifiers)
+            self.mode(camera, x, y, button, modifiers)
 
     def time_control(self,x):
         if x < -0.88:
@@ -66,7 +67,7 @@ class HUD:
         else:
             self.current_actions['increase_timestep'] = True
 
-    def spacecraft_control(self, x, y, button, modifiers):
+    def spacecraft_control(self, camera, x, y, button, modifiers):
         if x < -0.46 and x > -0.616:
             if x <-0.56 and y >-0.87:
                 self.current_actions['normal'] = True
@@ -80,6 +81,15 @@ class HUD:
                 self.current_actions['radialout'] = True
             else:
                 self.current_actions['antinormal'] = True
+        elif x > 0.29 and x < 0.51:
+            if not camera.switch:
+                camera.cinematic_view = True
+                update_zoom(self.universe, camera, 1)
+            camera.switch = False
+        elif x > 0.53 and x < 0.62:
+            update_focus(self.universe, camera, -1)
+        elif x > 0.62 and x < 0.705:
+            update_focus(self.universe, camera, 1)
 
     def release_interaction(self, x, y, button, modifiers):
         self.current_actions = dict.fromkeys(self.current_actions, False)

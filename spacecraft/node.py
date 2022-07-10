@@ -32,14 +32,14 @@ class Maneuver(Node):
         normal(universe, self.vessel, self.normal)
         radial(universe, self.vessel, self.radial)
 
-def prograde(universe, vessel, value):
-    vessel.barycentre.pvel += value*(vessel.bodycentre.rvel/np.linalg.norm(vessel.bodycentre.rvel))
+def prograde(universe, vessel, acceleration):
+    vessel.barycentre.pvel += universe.timestep*acceleration*(vessel.bodycentre.rvel/np.linalg.norm(vessel.bodycentre.rvel))
 
-def normal(universe, vessel, value):
+def normal(universe, vessel, acceleration):
     normalVec = np.cross(vessel.bodycentre.rpos, vessel.bodycentre.rvel)
-    vessel.barycentre.pvel += value*(normalVec/np.linalg.norm(normalVec))
+    vessel.barycentre.pvel += universe.timestep*acceleration*(normalVec/np.linalg.norm(normalVec))
 
-def radial(unvierse, vessel, value):
+def radial(universe, vessel, acceleration):
     normalVec = np.cross(vessel.bodycentre.rpos, vessel.bodycentre.rvel)
     radialVec = np.cross(vessel.bodycentre.rvel,normalVec)
-    vessel.barycentre.pvel += value*(radialVec/np.linalg.norm(radialVec))
+    vessel.barycentre.pvel += universe.timestep*acceleration*(radialVec/np.linalg.norm(radialVec))

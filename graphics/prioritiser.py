@@ -30,12 +30,10 @@ def update_zoom(universe, camera, modifier, focus_change=False):
     update_features(universe, camera, focus_change)
 
 def update_focus(universe, camera, modifier):
-    if not camera.switch:
-        camera.switch = True
-        universe.focus += modifier
-        universe.focus_entity = universe.entities[1+universe.focus%(universe.entitylength)]
-        universe.focus_entity.label.regenerate_label()
-        update_zoom(universe,camera,1,focus_change = True)
+    universe.focus += modifier
+    universe.focus_entity = universe.entities[1+universe.focus%(universe.entitylength)]
+    universe.focus_entity.label.regenerate_label()
+    update_zoom(universe,camera,1,focus_change = True)
 
 def update_fov(universe, camera, modifier=1, value=None):
     if value:

@@ -4,7 +4,6 @@ from OpenGL.GLU import *
 from ctypes import *
 import pyglet
 import numpy as np
-from graphics.controls import *
 from data.loading import *
 from graphics.trace import *
 from graphics.rings import *

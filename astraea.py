@@ -7,7 +7,6 @@ import pyglet
 from data.globals import *
 from graphics.scene import *
 from analysis.profile import *
-from graphics.controls import *
 from mechanics.simulation import *
 
 def frame(dt,universe,camera):

@@ -22,11 +22,15 @@ class Mouse(pyglet.window.Window):
         data.globals.camera.horizontal_rot += self.mouse_precision(dx, 0.5, 100)
 
     def on_mouse_press(self, x, y, button, modifiers):
+        if data.globals.camera.cinematic_view:
+            data.globals.camera.cinematic_view = False
+            update_zoom(data.globals.universe, data.globals.camera, 1)
+            data.globals.camera.switch = True
         self.dragging = False
         self.scaledx = (x-data.globals.camera.halfwidth)*data.globals.camera.invhalfwidth
         self.scaledy = (y-data.globals.camera.halfheight)*data.globals.camera.invhalfheight
         if self.scaledy < -0.73:
-            data.globals.camera.HUD.press_interaction(self.scaledx, self.scaledy, button, modifiers)
+            data.globals.camera.HUD.press_interaction(data.globals.camera, self.scaledx, self.scaledy, button, modifiers)
 
     def on_mouse_release(self, x, y, button, modifiers):
         self.scaledx = (x-data.globals.camera.halfwidth)*data.globals.camera.invhalfwidth
