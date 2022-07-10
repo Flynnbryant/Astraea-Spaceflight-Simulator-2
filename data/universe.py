@@ -9,14 +9,15 @@ from mechanics.entity import *
 from spacecraft.vessel import *
 
 class Universe:
-    def __init__(self, focus, profiler):
-        self.profile = Profile(profiler)
+    def __init__(self, focus, profile):
+        self.profile = Profile(profile)
         self.focusinput = focus
 
     def populate(self):
-        self.grav_constant = 6.67430*10**-11
-        self.c = 299792458
-        self.time = 1640995200 #Unix time for 2022 Jan 1st 00:00, the simulation start point
+        self.grav_constant = 6.67430*10**-11    #Universal gravitational constant
+        self.c = 299792458                      #Speed of light, in m/s
+        self.g = 9.80665                        #Standard gravity, in m/s^2
+        self.time = 1640995200                  #Unix time for 2022 Jan 1st 00:00, the simulation start point
         self.framecount = 0
         self.usertime = 1.0
         self.bodies = []

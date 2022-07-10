@@ -12,16 +12,16 @@ from graphics.spheroid import *
 from graphics.HUD_UI import *
 
 class Camera:
-    def __init__(self, window, keys, universe):
+    def __init__(self, universe, window):
         glMatrixMode(GL_MODELVIEW)
         self.screenstate = False
-        self.keys = keys
         self.window = window
         self.halfwidth = self.window.width//2
         self.halfheight = self.window.height//2
         self.invhalfwidth = 1/self.halfwidth
         self.invhalfheight = 1/self.halfheight
-        self.loadingscreen = pyglet.sprite.Sprite(pyglet.image.load('data/sprites/loadingscreen.png'), x=self.halfwidth*-0.425, y=self.halfheight*-0.985)
+        #self.loadingscreen = pyglet.sprite.Sprite(pyglet.image.load('data/sprites/loadingscreen.png'), x=self.halfwidth*-0.425, y=self.halfheight*-0.985)
+        self.loadingscreen = sprite_loader(self, 'loadingscreen2', -1, -1.05, 0.5, None)
 
     def populate(self, universe):
         self.perspective = self.window.width/self.window.height

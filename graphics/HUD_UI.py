@@ -20,15 +20,15 @@ class HUD:
         self.timestep_label.text.text = update_timestep_label(universe.usertime)
         self.current_actions = dict.fromkeys(['decrease_timestep','increase_timestep','prograde','retrograde','radialin','radialout','normal','antinormal','decrease_focus','increase_focus','pause_timestep'],False)
 
-        self.sprite         = sprite_loader(camera, 'UI2_Spacecraft',-1     ,-1.05  ,0.75,self.background,batch=self.HUDBatch)
-        self.focus_left     = sprite_loader(camera, 'focus_left'    ,0.532  ,-0.92  ,0.75,self.foreground)
-        self.focus_right    = sprite_loader(camera, 'focus_right'   ,0.622  ,-0.92  ,0.75,self.foreground)
-        self.time_center    = sprite_loader(camera, 'time_center'   ,-0.9902,-0.9102,0.75,self.foreground)
-        self.time_left_red  = sprite_loader(camera, 'time_left_red' ,-0.9902,-0.9102,0.75,self.foreground)
-        self.time_left      = sprite_loader(camera, 'time_left'     ,-0.9902,-0.9102,0.75,self.foreground)
-        self.time_right_red = sprite_loader(camera, 'time_right_red',-0.9902,-0.9102,0.75,self.foreground)
-        self.time_right     = sprite_loader(camera, 'time_right'    ,-0.9902,-0.9102,0.75,self.foreground)
-        self.velocity_red   = sprite_loader(camera, 'velocity_red'  ,-0.62  ,-0.9852,0.75,self.foreground)
+        self.spacecraft_background  = sprite_loader(camera, 'UI2_Spacecraft',-1     ,-1.05  ,0.75,self.background,batch=self.HUDBatch)
+        self.focus_left             = sprite_loader(camera, 'focus_left'    ,0.532  ,-0.92  ,0.75,self.foreground)
+        self.focus_right            = sprite_loader(camera, 'focus_right'   ,0.622  ,-0.92  ,0.75,self.foreground)
+        self.time_center            = sprite_loader(camera, 'time_center'   ,-0.9902,-0.9102,0.75,self.foreground)
+        self.time_left_red          = sprite_loader(camera, 'time_left_red' ,-0.9902,-0.9102,0.75,self.foreground)
+        self.time_left              = sprite_loader(camera, 'time_left'     ,-0.9902,-0.9102,0.75,self.foreground)
+        self.time_right_red         = sprite_loader(camera, 'time_right_red',-0.9902,-0.9102,0.75,self.foreground)
+        self.time_right             = sprite_loader(camera, 'time_right'    ,-0.9902,-0.9102,0.75,self.foreground)
+        self.velocity_red           = sprite_loader(camera, 'velocity_red'  ,-0.62  ,-0.9852,0.75,self.foreground)
 
     def draw(self, universe, camera):
         glEnable(GL_DEPTH_TEST)
@@ -110,17 +110,17 @@ class HUD:
             elif self.current_actions['decrease_focus']:
                 self.focus_left.draw()
             elif self.current_actions['prograde']:
-                prograde(self.universe, self.universe.vessels[0], 9.81*self.universe.timestep)
+                prograde(self.universe, self.universe.vessels[0], self.universe.g*self.universe.timestep)
             elif self.current_actions['retrograde']:
-                prograde(self.universe, self.universe.vessels[0], -9.81*self.universe.timestep)
+                prograde(self.universe, self.universe.vessels[0], -self.universe.g*self.universe.timestep)
             elif self.current_actions['normal']:
-                normal(self.universe, self.universe.vessels[0], 9.81*self.universe.timestep)
+                normal(self.universe, self.universe.vessels[0], self.universe.g*self.universe.timestep)
             elif self.current_actions['antinormal']:
-                normal(self.universe, self.universe.vessels[0], -9.81*self.universe.timestep)
+                normal(self.universe, self.universe.vessels[0], -self.universe.g*self.universe.timestep)
             elif self.current_actions['radialin']:
-                radial(self.universe, self.universe.vessels[0], -9.81*self.universe.timestep)
+                radial(self.universe, self.universe.vessels[0], -self.universe.g*self.universe.timestep)
             elif self.current_actions['radialout']:
-                radial(self.universe, self.universe.vessels[0], 9.81*self.universe.timestep)
+                radial(self.universe, self.universe.vessels[0], self.universe.g*self.universe.timestep)
 
     def release_interaction(self, x, y, button, modifiers):
         self.current_actions = dict.fromkeys(self.current_actions, False)

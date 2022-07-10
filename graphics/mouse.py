@@ -6,7 +6,7 @@ import data.globals
 
 class Mouse(pyglet.window.Window):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(*args,resizable=True,vsync=0,**kwargs)
         self.set_icon(pyglet.image.load('data/textures/icon.png'))
         self.dragging = False
 

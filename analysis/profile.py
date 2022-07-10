@@ -21,7 +21,7 @@ class Profile():
         self.framecount = 0
         self.modules = []
         self.groups = {}
-        self.moving_length = 200
+        self.moving_length = 100
         self.fpshistory = np.zeros(self.moving_length)
         self.mshistory = np.zeros(self.moving_length)
         self.outputend = 0
