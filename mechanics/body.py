@@ -4,7 +4,6 @@ from mechanics.entity import *
 from mechanics.rotations import *
 from graphics.trace import *
 from graphics.spheroid import *
-from graphics.rings import *
 from graphics.labels import *
 from mechanics.centres import *
 

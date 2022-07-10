@@ -4,7 +4,6 @@ from graphics.camera import *
 from data.loading import *
 from graphics.trace import *
 from graphics.labels import *
-from graphics.rings import *
 from graphics.prioritiser import *
 from graphics.lighting import *
 import numpy as np

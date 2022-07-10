@@ -13,7 +13,7 @@ class HUD:
         self.HUDBatch = pyglet.graphics.Batch()
         self.foreground = pyglet.graphics.OrderedGroup(0)
         self.background = pyglet.graphics.OrderedGroup(1)
-        self.timestep_label = DataLabel(camera,-0.94,-0.755,self.HUDBatch,self.foreground)
+        self.timestep_label = DataLabel(camera,-0.947,-0.755,self.HUDBatch,self.foreground)
         self.timestamp_label = DataLabel(camera,-0.98,-0.938,self.HUDBatch,self.foreground)
         self.sprite = pyglet.sprite.Sprite(pyglet.image.load('data/sprites/UI2_Spacecraft.png'), x=-camera.halfwidth*1, y=-camera.halfheight*1.05, batch=self.HUDBatch, group=self.background)
         #self.sprite = pyglet.sprite.Sprite(pyglet.resource.animation('data/sprites/catjam.gif'), x=camera.halfwidth*-1, y=camera.halfheight*0.5)
@@ -60,7 +60,7 @@ class HUD:
         Smins = str(mins).zfill(2)
         sec = int((tsd.seconds-hr*60*60-mins*60))
         Ssec = str(sec).zfill(2)
-        Smil = str(tsd.microseconds)[0:1]
+        Smil = str(tsd.microseconds).zfill(6)[:2]
         self.timestep_label.text.text = f'{Sdays}d {Shr}:{Smins}:{Ssec}.{Smil}'
         self.timestamp_label.text.text = datetime.utcfromtimestamp(universe.time).strftime('%Y-%m-%d %H:%M:%S.%f')
 
@@ -75,9 +75,9 @@ class HUD:
             else:
                 self.time_right_red.draw()
         elif self.current_actions['decrease_timestep']:
-            newtime = max(self.universe.usertime*0.95, 1)
+            newtime = max(self.universe.usertime*0.95, 0.01)
             self.universe.usertime = newtime
-            if newtime >1:
+            if newtime >0.01:
                 self.time_left.draw()
             else:
                 self.time_left_red.draw()

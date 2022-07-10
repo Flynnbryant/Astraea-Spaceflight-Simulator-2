@@ -6,7 +6,6 @@ import pyglet
 import numpy as np
 from data.loading import *
 from graphics.trace import *
-from graphics.rings import *
 from graphics.prioritiser import *
 from graphics.lighting import *
 from graphics.spheroid import *
