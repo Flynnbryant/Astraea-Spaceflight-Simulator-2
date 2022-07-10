@@ -18,11 +18,10 @@ def perturbations(universe):
 
             ''' Correct for parent error '''
             #if entity.isbarycentric:
-
-            if isinstance(entity.primary, Barycentre):
+            if isinstance(entity.primary, Barycentre) and isinstance(entity, Vessel):
                 true_vec = entity.primary.object.bodycentre.rpos-entity.barycentre.rpos
                 entity.barycentre.pvel += universe.timestep*entity.primary.object.bodycentre.SGP*((true_vec/np.linalg.norm(true_vec)**3) + (entity.barycentre.rpos/np.linalg.norm(entity.barycentre.rpos)**3))
-            
+
             ''' Apply pertubations from relevant siblings (bodies orbiting around the same parent) '''
             '''
             for sibling in entity.major_siblings:
