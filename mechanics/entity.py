@@ -19,6 +19,7 @@ class Entity():
         self.color = np.array([float(i) for i in (data[4].split(','))])
         self.colorsmall = self.color/255
         self.specific_strength = 1
+        self.orbit = Orbit(self)
 
         if self.name == focus:
             universe.focus = self.focus_num
@@ -26,7 +27,6 @@ class Entity():
 
         for body in universe.bodies:
             if body.name == data[2]:
-                self.nodal_precession = 0.
                 self.primary = body.barycentre if data[3] == 'barycentre' else body.bodycentre
                 self.barycentre_model = data[3] == 'barycentre'
                 read_initial_state(self, data, universe) if data[5] == 'state' else read_initial_elements(self, data, universe)

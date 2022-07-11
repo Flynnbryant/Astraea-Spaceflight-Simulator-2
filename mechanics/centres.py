@@ -29,11 +29,11 @@ class Barycentre(Centre):
 
     def check_model(self, universe, vessel):
         self.sibling_collisions(universe, vessel)
-        if vessel.periapsis < self.object.barycentre_transition:
+        if vessel.orbit.periapsis < self.object.barycentre_transition:
             vessel.change_primary(universe, vessel.primary.object, barycentre=False)
-        elif vessel.rel_dist > vessel.primary.object.SOI:
+        elif vessel.orbit.rel_dist > vessel.primary.object.SOI:
             vessel.change_primary(universe, vessel.primary.object.primary.object, barycentre=False)
-        elif vessel.rel_dist < vessel.primary.object.mean_radius:
+        elif vessel.orbit.rel_dist < vessel.primary.object.mean_radius:
             vessel.collision(universe, vessel)
 
 class Bodycentre(Centre):
@@ -42,9 +42,9 @@ class Bodycentre(Centre):
 
     def check_model(self, universe, vessel):
         self.sibling_collisions(universe, vessel)
-        if vessel.periapsis > self.object.barycentre_transition:
+        if vessel.orbit.periapsis > self.object.barycentre_transition:
             vessel.change_primary(universe, vessel.primary.object, barycentre=True)
-        elif vessel.rel_dist < vessel.primary.object.mean_radius:
+        elif vessel.orbit.rel_dist < vessel.primary.object.mean_radius:
             vessel.collision(universe, vessel)
 
 class Vesselcentre():

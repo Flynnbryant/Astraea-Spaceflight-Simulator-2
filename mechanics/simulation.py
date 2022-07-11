@@ -27,8 +27,8 @@ def simulation(universe, camera, dt):
 def osculating_orbits(universe):
     ''' Begin by assuming a perfect elliptical osculating orbit for each object. '''
     for entity in universe.entities[1:]:
-        entity.mean_anomaly = (entity.epoch_anomaly + (universe.time-entity.epoch_time)*entity.mean_motion)%(2*np.pi)
-        entity.barycentre.rpos = elliptical_elements_to_pos(entity, entity.mean_anomaly) if entity.eccentricity < 1 else hyperbolic_elements_to_pos(entity, entity.mean_anomaly)
+        entity.orbit.mean_anomaly = (entity.orbit.epoch_anomaly + (universe.time-entity.orbit.epoch_time)*entity.orbit.mean_motion)%(2*np.pi)
+        entity.barycentre.rpos = entity.orbit.elliptical_elements_to_pos(entity.orbit.mean_anomaly) if entity.orbit.eccentricity < 1 else entity.orbit.hyperbolic_elements_to_pos(entity.orbit.mean_anomaly)
 
     ''' Using conservation of momentum, calculate the positions of the sun and planets relative to their barycentres '''
     for planet in universe.star.satellites:

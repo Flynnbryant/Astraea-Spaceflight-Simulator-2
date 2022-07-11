@@ -43,9 +43,9 @@ class Body(Entity):
 
     def orbital_environment(self, universe):
         self.major_siblings = major_siblings(self)
-        self.hill = self.semi_major_axis*(1-self.eccentricity)*np.cbrt(self.barycentre.mass/(3*self.primary.mass))
-        self.SOI = self.semi_major_axis*(self.barycentre.mass/self.primary.mass)**(0.4)
-        self.outer_label_distance = self.semi_major_axis * np.log10(self.mean_radius)
+        self.hill = self.orbit.semi_major_axis*(1-self.orbit.eccentricity)*np.cbrt(self.barycentre.mass/(3*self.primary.mass))
+        self.SOI = self.orbit.semi_major_axis*(self.barycentre.mass/self.primary.mass)**(0.4)
+        self.outer_label_distance = self.orbit.semi_major_axis * np.log10(self.mean_radius)
         self.inner_label_distance = 0.05 * self.outer_label_distance
 
 def major_siblings(body):

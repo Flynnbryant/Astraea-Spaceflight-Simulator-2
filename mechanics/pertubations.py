@@ -7,7 +7,7 @@ from spacecraft.vessel import *
 def perturbations(universe):
     ''' loop through all bodies and vessels, applying pertubations if the timestep is sufficiently small to be more accurate than not considering them '''
     for entity in universe.entities[1:]:
-        if universe.timestep < 0.02*entity.period:
+        if universe.timestep < 0.02*entity.orbit.period:
 
             ''' Apply pertubations from its grandparent, if it has one. E.g. sun to moon.'''
             if entity.primary.object.primary:
@@ -78,8 +78,8 @@ def perturbations(universe):
 
 def rectify(universe, camera):
     universe.refresh_object = universe.bodies[(universe.framecount % universe.bodylength)+1]
-    universe.refresh_object.barycentre.rvel = elliptical_elements_to_vel(universe.refresh_object) + universe.refresh_object.barycentre.pvel
-    state_to_elliptical_elements(universe.refresh_object, universe.refresh_object.barycentre, universe.time)
+    universe.refresh_object.barycentre.rvel = (universe.refresh_object.orbit.elliptical_elements_to_vel() if universe.refresh_object.orbit.eccentricity <1 else universe.refresh_object.orbit.hyperbolic_elements_to_vel()) + universe.refresh_object.barycentre.pvel
+    universe.refresh_object.orbit.state_to_elements(universe.refresh_object.barycentre, universe.time)
     universe.refresh_object.barycentre.pvel = np.array([0.,0.,0.],dtype=np.float64)
     universe.refresh_object.barycentre.ppos = np.array([0.,0.,0.],dtype=np.float64)
     if universe.refresh_object.trace in camera.traces:
@@ -88,9 +88,9 @@ def rectify(universe, camera):
 
     for vessel in universe.vessels:
         #vessel.nodal_precession = universe.timestep*vessel.primary.object.precession_constant*np.cos(vessel.inclination)/(vessel.sqrta3omu*(vessel.semi_major_axis*vessel.omes)**2)
-        vessel.bodycentre.rvel = elliptical_elements_to_vel(vessel) + vessel.barycentre.pvel
+        vessel.bodycentre.rvel = (vessel.orbit.elliptical_elements_to_vel() if vessel.orbit.eccentricity <1 else vessel.orbit.hyperbolic_elements_to_vel()) + vessel.barycentre.pvel
         vessel.primary.check_model(universe, vessel)
-        state_to_elliptical_elements(vessel, vessel.bodycentre, universe.time)
+        vessel.orbit.state_to_elements(vessel.bodycentre, universe.time)
         vessel.trace.calculate_trace()
         vessel.barycentre.pvel = np.array([0.,0.,0.],dtype=np.float64)
     universe.profile.add('ret')

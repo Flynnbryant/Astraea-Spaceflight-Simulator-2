@@ -37,9 +37,9 @@ class Universe:
 
         self.star.satellites = self.star.bodycentre.satellites + self.star.barycentre.satellites
         self.star.neg_inv_mass = -1/(self.star.bodycentre.mass*sum(planet.barycentre.mass for planet in self.star.satellites))
-        self.star.barycentre_transition = 0.5*self.star.barycentre.satellites[0].semi_major_axis
+        self.star.barycentre_transition = 0.5*self.star.barycentre.satellites[0].orbit.semi_major_axis
 
         for body in self.bodies[1:]:
             body.satellites = body.bodycentre.satellites + body.barycentre.satellites
-            body.barycentre_transition = 0.5*body.barycentre.satellites[0].semi_major_axis if body.barycentre.satellites else 0.
+            body.barycentre_transition = 0.5*body.barycentre.satellites[0].orbit.semi_major_axis if body.barycentre.satellites else 0.
             body.orbital_environment(self)
