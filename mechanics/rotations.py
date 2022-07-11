@@ -43,7 +43,7 @@ def celestial_to_ecliptic(RA, DEC):
     DEC = np.deg2rad(DEC)
 
     celestial_vec = np.array([np.cos(RA)*np.cos(DEC),np.sin(RA)*np.cos(DEC),np.sin(DEC)])
-    axis_vector = np.squeeze(np.asarray(np.matmul(celestial_vec,CEL_to_ECL_matrix)))
+    axis_vector = np.squeeze(np.asarray(np.dot(celestial_vec,CEL_to_ECL_matrix)))
 
     default = np.array([0.,0.,1.])
     tilt_vector = np.cross(default,axis_vector)

@@ -2,6 +2,11 @@ import time
 import numpy as np
 from OpenGL.GL import *
 from mechanics.orbit import *
+from numba import njit
+
+#@njit
+#def faster_calculate_trace(eccentricity, trace_detail, rotation_matrix, semi_major_axis, semi_minor_axis, periapsis):
+
 
 class Trace:
     def __init__(self, entity, bodylength, vesseltype):
@@ -16,7 +21,7 @@ class Trace:
         if self.orbit.eccentricity < 1:
             values = np.linspace(0, 2*np.pi, self.trace_detail, dtype=np.float32)
             array = np.add(-0.5*self.orbit.eccentricity*np.sin(2*values),values)
-            self.points = np.matmul(self.orbit.rotation_matrix, np.array([
+            self.points = np.dot(self.orbit.rotation_matrix, np.array([
                 self.orbit.semi_major_axis * np.cos(array) - self.orbit.semi_major_axis + self.orbit.periapsis,
                 self.orbit.semi_minor_axis * np.sin(array)], dtype=np.float32))
 

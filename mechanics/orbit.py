@@ -13,6 +13,12 @@ def eccentric_anomaly(E, e, M):
 def hyperbolic_anomaly(H, e, M):
     return e*np.sinh(H) - H - M
 
+@njit
+def faster_elements_to_pos(sqrtp, eccentric_anomaly, sqrtm, semi_major_axis, eccentricity, rotation_matrix):
+    true_anomaly = 2*np.arctan2(sqrtp*np.sin(0.5*eccentric_anomaly),sqrtm*np.cos(0.5*eccentric_anomaly))
+    rel_dist = semi_major_axis*(1-eccentricity*np.cos(eccentric_anomaly))
+    return true_anomaly, rel_dist, rel_dist * np.dot(rotation_matrix,np.array([np.cos(true_anomaly),np.sin(true_anomaly)]))
+
 class Orbit:
     def __init__(self, entity):
         self.entity = entity
@@ -20,16 +26,15 @@ class Orbit:
 
     def elliptical_elements_to_pos(self, mean_anomaly):
         self.eccentric_anomaly = brentq(eccentric_anomaly,-0.1,6.3,args=(self.eccentricity, mean_anomaly),xtol=1e-8)
-        self.true_anomaly = 2*np.arctan2(self.sqrtp*np.sin(0.5*self.eccentric_anomaly),self.sqrtm*np.cos(0.5*self.eccentric_anomaly))
-        self.rel_dist = self.semi_major_axis*(1-self.eccentricity*np.cos(self.eccentric_anomaly))
-        return self.rel_dist * np.matmul(self.rotation_matrix,np.array([np.cos(self.true_anomaly),np.sin(self.true_anomaly)]))
+        self.true_anomaly, self.rel_dist, pos = faster_elements_to_pos(self.sqrtp, self.eccentric_anomaly, self.sqrtm, self.semi_major_axis, self.eccentricity, self.rotation_matrix)
+        return pos
 
     def hyperbolic_elements_to_pos(self, mean_anomaly):
         return self.entity.barycentre.rpos
 
     def elliptical_elements_to_vel(self):
         plane_velocity = np.array([-np.sin(self.eccentric_anomaly),np.sqrt(self.omes)*np.cos(self.eccentric_anomaly)])
-        return np.matmul(self.rotation_matrix,plane_velocity) * np.sqrt(self.entity.primary.SGP*self.semi_major_axis) / self.rel_dist
+        return np.dot(self.rotation_matrix,plane_velocity) * np.sqrt(self.entity.primary.SGP*self.semi_major_axis) / self.rel_dist
 
     def hyperbolic_elements_to_vel(self):
         pass
@@ -50,7 +55,6 @@ class Orbit:
 
     def state_to_elliptical_elements(self, centre, timev):
         self.periapsis = self.semi_major_axis*(1-self.eccentricity)
-
         self.semi_minor_axis = self.semi_major_axis*np.sqrt(self.omes)
         self.ascending_node = np.cross(np.array([0,0,1]),self.momentum_vec)
         self.ascending = np.linalg.norm(self.ascending_node)
