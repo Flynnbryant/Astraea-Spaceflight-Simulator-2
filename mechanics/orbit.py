@@ -19,6 +19,12 @@ def faster_elements_to_pos(sqrtp, eccentric_anomaly, sqrtm, semi_major_axis, ecc
     rel_dist = semi_major_axis*(1-eccentricity*np.cos(eccentric_anomaly))
     return true_anomaly, rel_dist, rel_dist * np.dot(rotation_matrix,np.array([np.cos(true_anomaly),np.sin(true_anomaly)]))
 
+@njit
+def faster_hyperbolic_elements_to_pos(sqrtp, eccentric_anomaly, sqrtm, semi_major_axis, eccentricity, rotation_matrix):
+    true_anomaly = 2*np.arctan2(sqrtp*np.sin(0.5*eccentric_anomaly),sqrtm*np.cos(0.5*eccentric_anomaly))
+    rel_dist = semi_major_axis*(1-eccentricity*np.cos(eccentric_anomaly))
+    return true_anomaly, rel_dist, rel_dist * np.dot(rotation_matrix,np.array([np.cos(true_anomaly),np.sin(true_anomaly)]))
+
 class Orbit:
     def __init__(self, entity):
         self.entity = entity

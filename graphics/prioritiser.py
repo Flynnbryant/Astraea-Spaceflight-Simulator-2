@@ -46,7 +46,7 @@ def specific_strength(camera, universe, object, global_strength):
         object.specific_strength = 1
     else:
         if object.primary is universe.focus_entity.primary:
-            distance = max(universe.focus_entity.semi_major_axis,camera.camera_distance-object.semi_major_axis)
+            distance = max(universe.focus_entity.orbit.semi_major_axis,camera.camera_distance-object.orbit.semi_major_axis)
         else:
             distance = camera.camera_distance
         inner_strength = 2*distance/object.inner_label_distance - 1

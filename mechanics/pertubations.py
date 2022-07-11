@@ -75,22 +75,3 @@ def perturbations(universe):
     def body_request_ps_vec(self, centre, sibling):
         return 0.
 '''
-
-def rectify(universe, camera):
-    universe.refresh_object = universe.bodies[(universe.framecount % universe.bodylength)+1]
-    universe.refresh_object.barycentre.rvel = (universe.refresh_object.orbit.elliptical_elements_to_vel() if universe.refresh_object.orbit.eccentricity <1 else universe.refresh_object.orbit.hyperbolic_elements_to_vel()) + universe.refresh_object.barycentre.pvel
-    universe.refresh_object.orbit.state_to_elements(universe.refresh_object.barycentre, universe.time)
-    universe.refresh_object.barycentre.pvel = np.array([0.,0.,0.],dtype=np.float64)
-    universe.refresh_object.barycentre.ppos = np.array([0.,0.,0.],dtype=np.float64)
-    if universe.refresh_object.trace in camera.traces:
-        universe.refresh_object.trace.calculate_trace()
-        universe.refresh_object.label.regenerate_label()
-
-    for vessel in universe.vessels:
-        #vessel.nodal_precession = universe.timestep*vessel.primary.object.precession_constant*np.cos(vessel.inclination)/(vessel.sqrta3omu*(vessel.semi_major_axis*vessel.omes)**2)
-        vessel.bodycentre.rvel = (vessel.orbit.elliptical_elements_to_vel() if vessel.orbit.eccentricity <1 else vessel.orbit.hyperbolic_elements_to_vel()) + vessel.barycentre.pvel
-        vessel.primary.check_model(universe, vessel)
-        vessel.orbit.state_to_elements(vessel.bodycentre, universe.time)
-        vessel.trace.calculate_trace()
-        vessel.barycentre.pvel = np.array([0.,0.,0.],dtype=np.float64)
-    universe.profile.add('ret')
