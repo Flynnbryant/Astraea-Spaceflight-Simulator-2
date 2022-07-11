@@ -13,7 +13,7 @@ def frame(dt,universe,camera):
     drawScene(universe,camera)
     universe.profile.output(dt)
 
-universe = init_universe(focus='Saturn',profile=True)
+universe = init_universe(focus='Saturn',profile=False)
 window = init_window(1920,1080,caption=title)
 camera = init_camera(universe,window)
 

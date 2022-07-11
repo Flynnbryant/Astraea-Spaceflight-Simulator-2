@@ -42,8 +42,7 @@ def osculating_orbits(universe):
     universe.profile.add('osc')
 
 def rectify(universe, camera):
-    universe.star.bodycentre.apos = universe.star.barycentre.apos + universe.star.bodycentre.rpos - universe.focus_entity.bodycentre.apos
-    universe.star.barycentre.apos -= universe.focus_entity.bodycentre.apos
+    universe.star.bodycentre.apos = universe.star.barycentre.apos + universe.star.bodycentre.rpos
     for planet in universe.star.satellites:
         planet.barycentre.apos = planet.barycentre.rpos + planet.primary.apos
         planet.bodycentre.apos = planet.bodycentre.rpos + planet.barycentre.apos
@@ -52,6 +51,10 @@ def rectify(universe, camera):
     for vessel in universe.vessels:
         vessel.bodycentre.rpos = vessel.barycentre.rpos
         vessel.bodycentre.apos = vessel.barycentre.rpos + vessel.primary.apos
+    subtract = -universe.focus_entity.bodycentre.apos
+    for entity in universe.entities:
+        entity.barycentre.apos += subtract
+        entity.bodycentre.apos += subtract
 
     universe.refresh_object = universe.bodies[(universe.framecount % universe.bodylength)+1]
     universe.refresh_object.barycentre.rvel = (universe.refresh_object.orbit.elliptical_elements_to_vel() if universe.refresh_object.orbit.eccentricity <1 else universe.refresh_object.orbit.hyperbolic_elements_to_vel()) + universe.refresh_object.barycentre.pvel
