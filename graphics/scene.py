@@ -15,9 +15,9 @@ def drawScene(universe, camera):
     glFlush()
 
 def update_features(universe, camera, focus_change = False):
-    camera.spheroids = []
+    camera.spheroids = [universe.star.spheroid]
     camera.traces = []
-    camera.labels = [DrawProfile('tra')]
+    camera.labels = [DrawProfile('tra'), universe.star.label]
     camera.draw_features = [camera.HUD, camera.flare, camera.light, DrawProfile('hud')]
     if camera.planetary_view:
         for object in [universe.focus_entity.local_planet] + universe.focus_entity.local_planet.satellites:

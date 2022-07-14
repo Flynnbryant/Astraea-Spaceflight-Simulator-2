@@ -19,7 +19,10 @@ class Spheroid:
         glRotatef(camera.vertical_rot, 1, 0, 0)
         glRotatef(camera.horizontal_rot, 0, 0, 1)
         glScalef(camera.scale_factor, camera.scale_factor, camera.scale_factor)
-        glEnable(GL_LIGHTING)
+        if self.body is universe.star:
+            glDisable(GL_LIGHTING)
+        else:
+            glEnable(GL_LIGHTING)
         glEnable(GL_NORMALIZE)
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()

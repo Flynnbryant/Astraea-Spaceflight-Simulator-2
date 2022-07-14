@@ -16,6 +16,7 @@ class Camera:
         glMatrixMode(GL_MODELVIEW)
         self.screenstate = False
         self.window = window
+        self.window.camera = self
         self.halfwidth = self.window.width//2
         self.halfheight = self.window.height//2
         self.invhalfwidth = 1/self.halfwidth
@@ -37,7 +38,7 @@ class Camera:
         self.cinematic_view = False
         self.cinematic_time = 0.
         self.light = Lighting(universe.star)
-        self.flare = Flare()
+        self.flare = Flare(universe.star)
         self.HUD = HUD(universe, self)
 
         for body in universe.bodies:

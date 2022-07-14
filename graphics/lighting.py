@@ -22,15 +22,21 @@ class Lighting:
         glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE )
 
 class Flare:
-    def __init__(self):
+    def __init__(self, sun):
+        self.sun = sun
         self.flaresprite = pyglet.sprite.Sprite(pyglet.image.load('data/sprites/sol_flare.png'), x=0, y=0)
 
     def draw(self, universe, camera):
-        self.flaresprite.x = 0.0*camera.halfwidth
-        self.flaresprite.y = 0.0*camera.halfheight
-        self.flaresprite.scale = 0.1
-        #self.flaresprite.draw()
+        pos = camera.model_to_projection(self.sun.bodycentre.apos)
+        glMatrixMode(GL_PROJECTION)
+        gluOrtho2D(-camera.halfwidth, camera.halfwidth, -camera.halfheight, camera.halfheight)
         glEnable(GL_DEPTH_TEST)
+        if pos[2] < 1 and pos[1] > -0.73: # Prevents labels from being drawn when they are behind the camera.
+            pass
+            #self.flaresprite.x=pos[0]*camera.halfwidth
+            #self.flaresprite.y=pos[1]*camera.halfheight
+            #self.flaresprite.scale = 50
+            #self.flaresprite.draw()
 
 def update_flux(universe, camera):
     background_strength = 0.8

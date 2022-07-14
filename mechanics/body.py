@@ -12,6 +12,7 @@ class Body(Entity):
         self.bodycentre, self.barycentre = create_centres(self, sn(data[10]), universe.grav_constant)
         super().__init__(data, universe, focus)
         mass_scale = 0.0001*np.log10(self.bodycentre.mass)
+        self.spheroid = Spheroid(self)
 
         if self.primary:
             self.primary.satellites.append(self)
@@ -23,13 +24,14 @@ class Body(Entity):
             self.label = EntityLabel(self, width = mass_scale, height = 20*mass_scale)
         else:
             self.label = EntityLabel(self, width = mass_scale, height = 20*mass_scale)
+            self.spheroid.render_detail = 16
             universe.star = self
             self.hill = np.Inf
             self.SOI = np.Inf
 
         self.rings = Ring(self) if self.name == 'Saturn' else False
         self.shape_and_orientation(data)
-        self.spheroid = Spheroid(self)
+
         self.texture = 'Default'
         universe.bodies.append(self)
 
