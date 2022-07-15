@@ -11,10 +11,14 @@ def update_zoom(universe, camera, modifier, focus_change=False):
     camera.inverse_scale_factor = np.clip((camera.camera_distance*1e4), 1e8, 2e15)
     camera.background.size = 50*camera.inverse_scale_factor
     camera.scale_factor = 1/camera.inverse_scale_factor
-    consistent = universe.focus_entity.local_planet
+    if universe.focus_entity is universe.star:
+        consistent = universe.focus_entity
+        camera.planetary_view = False
+    else:
+        consistent = universe.focus_entity.local_planet
+        camera.planetary_view = camera.camera_distance<consistent.hill
     global_strength = min(1,np.abs(1-camera.camera_distance/consistent.hill))
-    camera.planetary_view = camera.camera_distance<consistent.hill
-
+    
     if camera.planetary_view:
         consistent.spheroid.calculate_render_detail(universe, camera)
         for object in consistent.satellites:
@@ -31,7 +35,7 @@ def update_zoom(universe, camera, modifier, focus_change=False):
 
 def update_focus(universe, camera, modifier):
     universe.focus += modifier
-    universe.focus_entity = universe.entities[1+universe.focus%(universe.entitylength)]
+    universe.focus_entity = universe.entities[universe.focus%(universe.entitylength)]
     universe.focus_entity.label.regenerate_label()
     update_zoom(universe,camera,1,focus_change = True)
 

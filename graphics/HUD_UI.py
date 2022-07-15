@@ -13,25 +13,33 @@ class HUD:
         self.press_mode = self.spacecraft_control
         self.draw_mode = self.spacecraft_draw
         self.HUDBatch = pyglet.graphics.Batch()
+        self.TextBatch= pyglet.graphics.Batch()
         self.foreground = pyglet.graphics.OrderedGroup(0)
-        self.background = pyglet.graphics.OrderedGroup(1)
-        self.timestamp_label = DataLabel(camera,-0.98,-0.938,self.HUDBatch,self.foreground)
-        self.timestep_label = DataLabel(camera,-0.947,-0.755,self.HUDBatch,self.foreground)
+        self.midground = pyglet.graphics.OrderedGroup(1)
+        self.background = pyglet.graphics.OrderedGroup(2)
+        self.timestamp_label = DataLabel(camera,-0.99,-0.935,self.TextBatch,self.foreground)
+        self.timestep_label = DataLabel(camera,-0.948,-0.758,self.TextBatch,self.foreground)
         self.timestep_label.text.text = update_timestep_label(universe.usertime)
         self.current_actions = dict.fromkeys(['decrease_timestep','increase_timestep','prograde','retrograde','radialin','radialout','normal','antinormal','decrease_focus','increase_focus','pause_timestep'],False)
 
-        self.spacecraft_background  = sprite_loader(camera, 'UI2_Spacecraft',-1     ,-1.05  ,0.75,self.background,batch=self.HUDBatch)
-        self.focus_left             = sprite_loader(camera, 'focus_left'    ,0.532  ,-0.92  ,0.75,self.foreground)
-        self.focus_right            = sprite_loader(camera, 'focus_right'   ,0.622  ,-0.92  ,0.75,self.foreground)
-        self.time_center            = sprite_loader(camera, 'time_center'   ,-0.9902,-0.9102,0.75,self.foreground)
-        self.time_left_red          = sprite_loader(camera, 'time_left_red' ,-0.9902,-0.9102,0.75,self.foreground)
-        self.time_left              = sprite_loader(camera, 'time_left'     ,-0.9902,-0.9102,0.75,self.foreground)
-        self.time_right_red         = sprite_loader(camera, 'time_right_red',-0.9902,-0.9102,0.75,self.foreground)
-        self.time_right             = sprite_loader(camera, 'time_right'    ,-0.9902,-0.9102,0.75,self.foreground)
-        self.velocity_red           = sprite_loader(camera, 'velocity_red'  ,-0.62  ,-0.9852,0.75,self.foreground)
+        self.camera_background      = sprite_loader(camera, 'UI3_camera_normal'     ,-0.68   ,-1.005  ,0.43,self.background,batch=self.HUDBatch)
+        self.spacecraft_background  = sprite_loader(camera, 'UI3_spacecraft_normal' ,-0.68   ,-1.01  ,0.43,self.background)
+        self.parameters_background  = sprite_loader(camera, 'UI3_parameters_normal' ,-0.68   ,-1.015  ,0.43,self.background)
+
+        self.time_background        = sprite_loader(camera, 'UI3_time_normal'       ,-1.02  ,-1.01  ,0.43,self.midground,batch=self.HUDBatch)
+        self.time_center            = sprite_loader(camera, 'UI3_time_center'       ,-1.02  ,-1.01  ,0.43,self.midground)
+        self.time_right             = sprite_loader(camera, 'UI3_time_right'        ,-1.02  ,-1.01  ,0.43,self.midground)
+        self.time_rightR            = sprite_loader(camera, 'UI3_time_rightR'       ,-1.02  ,-1.01  ,0.43,self.midground)
+        self.time_left              = sprite_loader(camera, 'UI3_time_left'         ,-1.02  ,-1.01  ,0.43,self.midground)
+        self.time_leftR             = sprite_loader(camera, 'UI3_time_leftR'        ,-1.02  ,-1.01  ,0.43,self.midground)
+
+        self.focus_left             = sprite_loader(camera, 'focus_left'        ,0.532  ,-0.92  ,0.75,self.background)
+        self.focus_right            = sprite_loader(camera, 'focus_right'       ,0.622  ,-0.92  ,0.75,self.background)
+        self.velocity_red           = sprite_loader(camera, 'velocity_red'      ,-0.62  ,-0.9852,0.75,self.background)
 
     def draw(self, universe, camera):
         glEnable(GL_DEPTH_TEST)
+        self.TextBatch.draw()
         self.time_draw(universe, camera)
         self.draw_mode(universe, camera)
         self.HUDBatch.draw()
@@ -40,11 +48,13 @@ class HUD:
     def press_interaction(self, camera, x, y, button, modifiers):
         if x <-0.7:
             self.time_control(x)
+        elif x >0.7:
+            self.menu_control(y)
         else:
             self.press_mode(camera, x, y, button, modifiers)
 
     def time_control(self,x):
-        if x < -0.88:
+        if x < -0.9:
             self.current_actions['decrease_timestep'] = True
         elif x <-0.8:
             self.universe.usertime = 1
@@ -52,6 +62,29 @@ class HUD:
             self.current_actions['pause_timestep'] = True
         else:
             self.current_actions['increase_timestep'] = True
+
+    def menu_control(self,y):
+        if y > -0.83:
+            self.press_mode = self.camera_control
+            self.draw_mode = self.camera_draw
+            self.camera_background.batch = self.HUDBatch
+            self.spacecraft_background.batch = None
+            self.parameters_background.batch = None
+        elif y > -0.92:
+            self.press_mode = self.spacecraft_control
+            self.draw_mode = self.spacecraft_draw
+            self.camera_background.batch = None
+            self.spacecraft_background.batch = self.HUDBatch
+            self.parameters_background.batch = None
+        else:
+            self.press_mode = self.parameters_control
+            self.draw_mode = self.parameters_draw
+            self.camera_background.batch = None
+            self.spacecraft_background.batch = None
+            self.parameters_background.batch = self.HUDBatch
+
+    def camera_control(self, camera, x, y, button, modifiers):
+        pass
 
     def spacecraft_control(self, camera, x, y, button, modifiers):
         if x < -0.46 and x > -0.616 and self.universe.usertime < 60:
@@ -79,6 +112,9 @@ class HUD:
             self.current_actions['increase_focus'] = True
             update_focus(self.universe, camera, 1)
 
+    def parameters_control(self, camera, x, y, button, modifiers):
+        pass
+
     def time_draw(self, universe, camera):
         self.timestamp_label.text.text = datetime.utcfromtimestamp(universe.time).strftime('%Y-%m-%d %H:%M:%S.%f')
         if True in self.current_actions.values():
@@ -89,7 +125,7 @@ class HUD:
                 if newtime < 31536000:
                     self.time_right.draw()
                 else:
-                    self.time_right_red.draw()
+                    self.time_rightR.draw()
             elif self.current_actions['decrease_timestep']:
                 newtime = max(self.universe.usertime*0.95, 0.01)
                 self.universe.usertime = newtime
@@ -97,9 +133,12 @@ class HUD:
                 if newtime >0.01:
                     self.time_left.draw()
                 else:
-                    self.time_left_red.draw()
+                    self.time_leftR.draw()
             elif self.current_actions['pause_timestep']:
                 self.time_center.draw()
+
+    def camera_draw(self, universe, camera):
+        pass
 
     def spacecraft_draw(self, universe, camera):
         if universe.usertime > 60:
@@ -122,6 +161,9 @@ class HUD:
             elif self.current_actions['radialout']:
                 radial(self.universe, self.universe.vessels[0], self.universe.g*self.universe.timestep)
 
+    def parameters_draw(self, universe, camera):
+        pass
+
     def release_interaction(self, x, y, button, modifiers):
         self.current_actions = dict.fromkeys(self.current_actions, False)
 
@@ -132,8 +174,8 @@ def update_timestep_label(timestep):
     sec = int((tsd.seconds-hr*60*60-mins*60))
     return f'{str(tsd.days).zfill(3)}d {str(hr).zfill(2)}:{str(mins).zfill(2)}:{str(sec).zfill(2)}.{str(tsd.microseconds).zfill(6)[:2]}'
 
-def sprite_loader(camera, name, x, y, scale, group, batch=None):
-    spriteobject = pyglet.sprite.Sprite(pyglet.image.load(f'data/sprites/{name}.png'), x=camera.halfwidth*x, y=camera.halfheight*y, group=group, batch=batch)
+def sprite_loader(camera, name, x, y, scale, group, batch=None, type='.png'):
+    spriteobject = pyglet.sprite.Sprite(pyglet.image.load(f'data/sprites/{name}{type}'), x=camera.halfwidth*x, y=camera.halfheight*y, group=group, batch=batch)
     spriteobject.scale = scale
     return spriteobject
 

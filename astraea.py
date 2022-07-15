@@ -6,7 +6,6 @@ import pyglet
 from data.universe import *
 from graphics.camera import *
 from graphics.mouse import *
-from graphics.scene import *
 from analysis.profile import *
 from mechanics.simulation import *
 
@@ -15,7 +14,7 @@ def frame(dt,universe,camera):
     drawScene(universe,camera)
     universe.profile.output(dt)
 
-universe = Universe(focus='Saturn',profile=False)
+universe = Universe(focus='Mercury',profile=False)
 window = Mouse(universe,1920,1080,caption=title)
 camera = Camera(universe,window)
 

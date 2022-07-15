@@ -15,7 +15,7 @@ class Entity():
         self.radii = 1000*np.array([float(data[7]),float(data[8]),float(data[9])])
         self.mean_radius = statistics.mean(self.radii)
         universe.entities.append(self)
-        self.focus_num = len(universe.entities)-2
+        self.focus_num = len(universe.entities)-1
         self.color = np.array([float(i) for i in (data[4].split(','))])
         self.colorsmall = self.color/255
         self.specific_strength = 1

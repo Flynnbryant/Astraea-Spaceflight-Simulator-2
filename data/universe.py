@@ -32,7 +32,7 @@ class Universe:
             #configure_masses()
             #generate_orbits()
 
-        self.entitylength = len(self.entities)-1
+        self.entitylength = len(self.entities)
         self.bodylength = len(self.bodies)-1
 
         self.star.satellites = self.star.bodycentre.satellites + self.star.barycentre.satellites
