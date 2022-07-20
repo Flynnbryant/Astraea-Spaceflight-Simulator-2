@@ -1,0 +1,128 @@
+*******************************************************************************
+JPL/HORIZONS                 2 Pallas (A802 FA)            2022-Jul-19 19:50:34
+Rec #:       2 (+COV) Soln.date: 2022-Apr-14_14:47:29   # obs: 9025 (1804-2022)
+ 
+IAU76/J2000 helio. ecliptic osc. elements (au, days, deg., period=Julian yrs):
+ 
+  EPOCH=  2449976.5 ! 1995-Sep-16.00 (TDB)         Residual RMS= .37134
+   EC= .2338123415749628   QR= 2.123204751285651   TP= 2449888.234262689
+   OM= 173.2983467771782   W=  309.6979606055149   IN= 34.80769754202284
+   A= 2.771128884599989    MA= 18.85867340545694   ADIST= 3.419053017914328
+   PER= 4.6131             N= .213657909           ANGMOM= .027842097
+   DAN= 2.27924            DDN= 3.07955            L= 128.6135357
+   B= -26.0531402          MOID= 1.22421002        TP= 1995-Jun-19.7342626890
+ 
+Asteroid physical parameters (km, seconds, rotational period in hours):
+   GM= 13.63               RAD= 256.5              ROTPER= 7.813221
+   H= 4.11                 G= .110                 B-V= .635
+                           ALBEDO= .155            STYP= B
+ 
+ASTEROID comments: 
+1: soln ref.= JPL#52, OCC=0
+2: source=ORB
+*******************************************************************************
+
+
+*******************************************************************************
+Ephemeris / WWW_USER Tue Jul 19 19:50:34 2022 Pasadena, USA      / Horizons
+*******************************************************************************
+Target body name: 2 Pallas (A802 FA)              {source: JPL#52}
+Center body name: Sun (10)                        {source: DE441}
+Center-site name: BODY CENTER
+*******************************************************************************
+Start time      : A.D. 2022-Jan-01 00:00:00.0000 TDB
+Stop  time      : A.D. 2022-Jan-02 00:00:00.0000 TDB
+Step-size       : 1440 minutes
+*******************************************************************************
+Center geodetic : 0.00000000,0.00000000,0.0000000 {E-lon(deg),Lat(deg),Alt(km)}
+Center cylindric: 0.00000000,0.00000000,0.0000000 {E-lon(deg),Dxy(km),Dz(km)}
+Center radii    : 696000.0 x 696000.0 x 696000.0 k{Equator, meridian, pole}    
+Keplerian GM    : 1.3271244004127939E+11 km^3/s^2
+Small perturbers: Yes                             {source: SB441-N16}
+Output units    : KM-S, deg
+Output type     : GEOMETRIC osculating elements
+Output format   : 10
+Reference frame : Ecliptic of J2000.0
+*******************************************************************************
+Initial IAU76/J2000 heliocentric ecliptic osculating elements (au, days, deg.):
+  EPOCH=  2449976.5 ! 1995-Sep-16.00 (TDB)         Residual RMS= .37134        
+   EC= .2338123415749628   QR= 2.123204751285651   TP= 2449888.234262689       
+   OM= 173.2983467771782   W=  309.6979606055149   IN= 34.80769754202284       
+  Equivalent ICRF heliocentric cartesian coordinates (au, au/d):
+   X=-1.970054913847300E+00  Y= 9.344601720792679E-01  Z=-5.069228381032120E-02
+  VX=-6.556101132986031E-03 VY=-1.072367279805506E-02 VZ= 2.566511942726757E-03
+Asteroid physical parameters (km, seconds, rotational period in hours):        
+   GM= 13.63               RAD= 256.5              ROTPER= 7.813221            
+   H= 4.11                 G= .110                 B-V= .635                   
+                           ALBEDO= .155            STYP= B                     
+*******************************************************************************
+            JDTDB,            Calendar Date (TDB),                     EC,                     QR,                     IN,                     OM,                      W,                     Tp,                      N,                     MA,                     TA,                      A,                     AD,                     PR,
+**************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+$$SOE
+2459580.500000000, A.D. 2022-Jan-01 00:00:00.0000,  2.299795172294257E-01,  3.192473209640355E+08,  3.492415582868830E+01,  1.729160194002859E+02,  3.106711852585635E+02,  3.711365377525304E+07,  2.472526607273345E-06,  2.682355035475560E+02,  2.429673574904457E+02,  4.145958816775455E+08,  5.099444423910556E+08,  1.456000509523338E+08,
+2459581.500000000, A.D. 2022-Jan-02 00:00:00.0000,  2.299803194350947E-01,  3.192452734524524E+08,  3.492421948378091E+01,  1.729160465698163E+02,  3.106725037291651E+02,  3.702753981258047E+07,  2.472546530162137E-06,  2.684476849159637E+02,  2.431520039678066E+02,  4.145936545650966E+08,  5.099420356777408E+08,  1.455988777595999E+08,
+$$EOE
+**************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+ 
+TIME
+
+  Barycentric Dynamical Time ("TDB" or T_eph) output was requested. This
+continuous relativistic coordinate time is equivalent to the relativistic
+proper time of a clock at rest in a reference frame comoving with the
+solar system barycenter but outside the system's gravity well. It is the
+independent variable in the solar system relativistic equations of motion.
+
+  TDB runs at a uniform rate of one SI second per second and is independent
+of irregularities in Earth's rotation.
+
+  Calendar dates prior to 1582-Oct-15 are in the Julian calendar system.
+Later calendar dates are in the Gregorian system.
+
+REFERENCE FRAME AND COORDINATES
+
+  Ecliptic at the standard reference epoch
+
+    Reference epoch: J2000.0
+    X-Y plane: adopted Earth orbital plane at the reference epoch
+               Note: IAU76 obliquity of 84381.448 arcseconds wrt ICRF X-Y plane
+    X-axis   : ICRF
+    Z-axis   : perpendicular to the X-Y plane in the directional (+ or -) sense
+               of Earth's north pole at the reference epoch.
+
+  Symbol meaning:
+
+    JDTDB    Julian Day Number, Barycentric Dynamical Time
+      EC     Eccentricity, e
+      QR     Periapsis distance, q (km)
+      IN     Inclination w.r.t X-Y plane, i (degrees)
+      OM     Longitude of Ascending Node, OMEGA, (degrees)
+      W      Argument of Perifocus, w (degrees)
+      Tp     Time of periapsis relative to epoch (P-E) (sec)
+      N      Mean motion, n (degrees/sec)
+      MA     Mean anomaly, M (degrees)
+      TA     True anomaly, nu (degrees)
+      A      Semi-major axis, a (km)
+      AD     Apoapsis distance (km)
+      PR     Sidereal orbit period (sec)
+
+ABERRATIONS AND CORRECTIONS
+
+ Geometric osculating elements have NO corrections or aberrations applied.
+
+Computations by ...
+
+    Solar System Dynamics Group, Horizons On-Line Ephemeris System
+    4800 Oak Grove Drive, Jet Propulsion Laboratory
+    Pasadena, CA  91109   USA
+
+    General site: https://ssd.jpl.nasa.gov/
+    Mailing list: https://ssd.jpl.nasa.gov/email_list.html
+    System news : https://ssd.jpl.nasa.gov/horizons/news.html
+    User Guide  : https://ssd.jpl.nasa.gov/horizons/manual.html
+    Connect     : browser        https://ssd.jpl.nasa.gov/horizons/app.html#/x
+                  API            https://ssd-api.jpl.nasa.gov/doc/horizons.html
+                  command-line   telnet ssd.jpl.nasa.gov 6775
+                  e-mail/batch   https://ssd.jpl.nasa.gov/ftp/ssd/hrzn_batch.txt
+                  scripts        https://ssd.jpl.nasa.gov/ftp/ssd/SCRIPTS
+    Author      : Jon.D.Giorgini@jpl.nasa.gov
+*******************************************************************************

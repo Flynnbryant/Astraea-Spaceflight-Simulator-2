@@ -1,0 +1,109 @@
+*******************************************************************************
+ Revised: Apr 20, 2022             Nereid / (Neptune)                       802
+                         https://ssd.jpl.nasa.gov/sats/elem/
+                        https://ssd.jpl.nasa.gov/sats/phys_par/
+
+ SATELLITE PHYSICAL PROPERTIES:
+  Mean radius (km)        =  170 +- 25      Mean density (g cm^-3)= n.a.
+  GM (km^3/s^2)           =  n.a.           Geometric Albedo      =  0.2  
+                                            V(1,0)                = +4.0 
+
+ Satellite Orbital Data (Epoch 2020-Jan-1; MEAN values are wrt ecliptic plane):
+  Semi-major axis, a (km) = 5504000.        Sid. orbital period =  360.1403 d
+  Eccentricity, e         = 0.749           Inclination, i      =   5.8 deg
+  Mean anomaly, M (deg)   = 318.0           Arg of periapse, w  = 290.3 deg
+
+ Fit to all reported measurements through 2019, including Voyager 2.
+*******************************************************************************
+
+
+*******************************************************************************
+Ephemeris / WWW_USER Tue Jul 19 20:05:47 2022 Pasadena, USA      / Horizons
+*******************************************************************************
+Target body name: Nereid (802)                    {source: nep101_merged}
+Center body name: Neptune Barycenter (8)          {source: DE441}
+Center-site name: BODY CENTER
+*******************************************************************************
+Start time      : A.D. 2022-Jan-01 00:00:00.0000 TDB
+Stop  time      : A.D. 2022-Jan-02 00:00:00.0000 TDB
+Step-size       : 1440 minutes
+*******************************************************************************
+Center geodetic : 0.00000000,0.00000000,0.0000000 {E-lon(deg),Lat(deg),Alt(km)}
+Center cylindric: 0.00000000,0.00000000,0.0000000 {E-lon(deg),Dxy(km),Dz(km)}
+Center radii    : (undefined)                                                  
+Keplerian GM    : 6.8365271005803980E+06 km^3/s^2
+Output units    : KM-S, deg
+Output type     : GEOMETRIC osculating elements
+Output format   : 10
+Reference frame : Ecliptic of J2000.0
+*******************************************************************************
+            JDTDB,            Calendar Date (TDB),                     EC,                     QR,                     IN,                     OM,                      W,                     Tp,                      N,                     MA,                     TA,                      A,                     AD,                     PR,
+**************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+$$SOE
+2459580.500000000, A.D. 2022-Jan-01 00:00:00.0000,  7.451378833946543E-01,  1.405371485044786E+06,  5.048639149913596E+00,  3.194556234307111E+02,  2.967167532818972E+02,  2.650654013668427E+06,  1.156942098653607E-05,  3.293334678262185E+02,  2.363219294406109E+02,  5.514242382366320E+06,  9.623113279687855E+06,  3.111650966966718E+07,
+2459581.500000000, A.D. 2022-Jan-02 00:00:00.0000,  7.451375667879478E-01,  1.405374047200527E+06,  5.048631698985663E+00,  3.194556328083740E+02,  2.967166704409941E+02,  2.564254896411694E+06,  1.156941090641364E-05,  3.303330814346300E+02,  2.375078922102144E+02,  5.514245585308442E+06,  9.623117123416357E+06,  3.111653678066097E+07,
+$$EOE
+**************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+ 
+TIME
+
+  Barycentric Dynamical Time ("TDB" or T_eph) output was requested. This
+continuous relativistic coordinate time is equivalent to the relativistic
+proper time of a clock at rest in a reference frame comoving with the
+solar system barycenter but outside the system's gravity well. It is the
+independent variable in the solar system relativistic equations of motion.
+
+  TDB runs at a uniform rate of one SI second per second and is independent
+of irregularities in Earth's rotation.
+
+  Calendar dates prior to 1582-Oct-15 are in the Julian calendar system.
+Later calendar dates are in the Gregorian system.
+
+REFERENCE FRAME AND COORDINATES
+
+  Ecliptic at the standard reference epoch
+
+    Reference epoch: J2000.0
+    X-Y plane: adopted Earth orbital plane at the reference epoch
+               Note: IAU76 obliquity of 84381.448 arcseconds wrt ICRF X-Y plane
+    X-axis   : ICRF
+    Z-axis   : perpendicular to the X-Y plane in the directional (+ or -) sense
+               of Earth's north pole at the reference epoch.
+
+  Symbol meaning:
+
+    JDTDB    Julian Day Number, Barycentric Dynamical Time
+      EC     Eccentricity, e
+      QR     Periapsis distance, q (km)
+      IN     Inclination w.r.t X-Y plane, i (degrees)
+      OM     Longitude of Ascending Node, OMEGA, (degrees)
+      W      Argument of Perifocus, w (degrees)
+      Tp     Time of periapsis relative to epoch (P-E) (sec)
+      N      Mean motion, n (degrees/sec)
+      MA     Mean anomaly, M (degrees)
+      TA     True anomaly, nu (degrees)
+      A      Semi-major axis, a (km)
+      AD     Apoapsis distance (km)
+      PR     Sidereal orbit period (sec)
+
+ABERRATIONS AND CORRECTIONS
+
+ Geometric osculating elements have NO corrections or aberrations applied.
+
+Computations by ...
+
+    Solar System Dynamics Group, Horizons On-Line Ephemeris System
+    4800 Oak Grove Drive, Jet Propulsion Laboratory
+    Pasadena, CA  91109   USA
+
+    General site: https://ssd.jpl.nasa.gov/
+    Mailing list: https://ssd.jpl.nasa.gov/email_list.html
+    System news : https://ssd.jpl.nasa.gov/horizons/news.html
+    User Guide  : https://ssd.jpl.nasa.gov/horizons/manual.html
+    Connect     : browser        https://ssd.jpl.nasa.gov/horizons/app.html#/x
+                  API            https://ssd-api.jpl.nasa.gov/doc/horizons.html
+                  command-line   telnet ssd.jpl.nasa.gov 6775
+                  e-mail/batch   https://ssd.jpl.nasa.gov/ftp/ssd/hrzn_batch.txt
+                  scripts        https://ssd.jpl.nasa.gov/ftp/ssd/SCRIPTS
+    Author      : Jon.D.Giorgini@jpl.nasa.gov
+*******************************************************************************

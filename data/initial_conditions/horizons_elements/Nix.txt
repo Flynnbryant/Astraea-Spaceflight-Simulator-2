@@ -1,0 +1,108 @@
+*******************************************************************************
+ Revised: Aug 19, 2015             Nix / (Pluto)                            902 
+   https://www.sciencedirect.com/science/article/pii/S0019103514001419#t0050
+
+ Pre-computed solution PLU043/DE430 reversion; fit to data through 2013.
+
+ SATELLITE GENERAL PHYSICAL PROPERTIES (PLU043, IAU2009, and derived values):
+  GM (km^3/s^2)         = 0.0030+-.0027   Density (g cm^-3)    = < 1.68 
+  Radius (km)           = 23-70           Geometric alebdo     =
+  Mass (10^21 kg )      =                 Hill Sphere rad., km =    
+  Surface grav. (cm/s^2)=                 Escape velocity, km/s=      
+
+ SATELLITE 200 YEAR MEAN ORBITAL DATA (barycentric):
+  Semi-major axis, a (km) =  48690        Orbital period, days   = 24.8548
+  Eccentricity, e         =  0.000 
+*******************************************************************************
+
+
+*******************************************************************************
+Ephemeris / WWW_USER Tue Jul 19 20:06:09 2022 Pasadena, USA      / Horizons
+*******************************************************************************
+Target body name: Nix (902)                       {source: plu043_merged}
+Center body name: Pluto Barycenter (9)            {source: plu043_merged}
+Center-site name: BODY CENTER
+*******************************************************************************
+Start time      : A.D. 2022-Jan-01 00:00:00.0000 TDB
+Stop  time      : A.D. 2022-Jan-02 00:00:00.0000 TDB
+Step-size       : 1440 minutes
+*******************************************************************************
+Center geodetic : 0.00000000,0.00000000,0.0000000 {E-lon(deg),Lat(deg),Alt(km)}
+Center cylindric: 0.00000000,0.00000000,0.0000000 {E-lon(deg),Dxy(km),Dz(km)}
+Center radii    : (undefined)                                                  
+Keplerian GM    : 9.7549354835741929E+02 km^3/s^2
+Output units    : KM-S, deg
+Output type     : GEOMETRIC osculating elements
+Output format   : 10
+Reference frame : Ecliptic of J2000.0
+*******************************************************************************
+            JDTDB,            Calendar Date (TDB),                     EC,                     QR,                     IN,                     OM,                      W,                     Tp,                      N,                     MA,                     TA,                      A,                     AD,                     PR,
+**************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+$$SOE
+2459580.500000000, A.D. 2022-Jan-01 00:00:00.0000,  1.787446606219679E-02,  4.854459446091511E+04,  1.128711458781451E+02,  2.273847128045256E+02,  2.056312998409896E+02, -6.454747872696668E+04,  1.628448470000939E-04,  1.051122429753470E+01,  1.089326750314854E+01,  4.942809527238030E+04,  5.031159608384548E+04,  2.210693225065895E+06,
+2459581.500000000, A.D. 2022-Jan-02 00:00:00.0000,  9.919102972522232E-03,  4.859319708536997E+04,  1.128710396513734E+02,  2.273846022145283E+02,  2.224302384652599E+02, -5.139580412478437E+04,  1.645802223213850E-04,  8.458732869243363E+00,  8.628004721681819E+00,  4.908002692634657E+04,  4.956685676732317E+04,  2.187383118835554E+06,
+$$EOE
+**************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+ 
+TIME
+
+  Barycentric Dynamical Time ("TDB" or T_eph) output was requested. This
+continuous relativistic coordinate time is equivalent to the relativistic
+proper time of a clock at rest in a reference frame comoving with the
+solar system barycenter but outside the system's gravity well. It is the
+independent variable in the solar system relativistic equations of motion.
+
+  TDB runs at a uniform rate of one SI second per second and is independent
+of irregularities in Earth's rotation.
+
+  Calendar dates prior to 1582-Oct-15 are in the Julian calendar system.
+Later calendar dates are in the Gregorian system.
+
+REFERENCE FRAME AND COORDINATES
+
+  Ecliptic at the standard reference epoch
+
+    Reference epoch: J2000.0
+    X-Y plane: adopted Earth orbital plane at the reference epoch
+               Note: IAU76 obliquity of 84381.448 arcseconds wrt ICRF X-Y plane
+    X-axis   : ICRF
+    Z-axis   : perpendicular to the X-Y plane in the directional (+ or -) sense
+               of Earth's north pole at the reference epoch.
+
+  Symbol meaning:
+
+    JDTDB    Julian Day Number, Barycentric Dynamical Time
+      EC     Eccentricity, e
+      QR     Periapsis distance, q (km)
+      IN     Inclination w.r.t X-Y plane, i (degrees)
+      OM     Longitude of Ascending Node, OMEGA, (degrees)
+      W      Argument of Perifocus, w (degrees)
+      Tp     Time of periapsis relative to epoch (P-E) (sec)
+      N      Mean motion, n (degrees/sec)
+      MA     Mean anomaly, M (degrees)
+      TA     True anomaly, nu (degrees)
+      A      Semi-major axis, a (km)
+      AD     Apoapsis distance (km)
+      PR     Sidereal orbit period (sec)
+
+ABERRATIONS AND CORRECTIONS
+
+ Geometric osculating elements have NO corrections or aberrations applied.
+
+Computations by ...
+
+    Solar System Dynamics Group, Horizons On-Line Ephemeris System
+    4800 Oak Grove Drive, Jet Propulsion Laboratory
+    Pasadena, CA  91109   USA
+
+    General site: https://ssd.jpl.nasa.gov/
+    Mailing list: https://ssd.jpl.nasa.gov/email_list.html
+    System news : https://ssd.jpl.nasa.gov/horizons/news.html
+    User Guide  : https://ssd.jpl.nasa.gov/horizons/manual.html
+    Connect     : browser        https://ssd.jpl.nasa.gov/horizons/app.html#/x
+                  API            https://ssd-api.jpl.nasa.gov/doc/horizons.html
+                  command-line   telnet ssd.jpl.nasa.gov 6775
+                  e-mail/batch   https://ssd.jpl.nasa.gov/ftp/ssd/hrzn_batch.txt
+                  scripts        https://ssd.jpl.nasa.gov/ftp/ssd/SCRIPTS
+    Author      : Jon.D.Giorgini@jpl.nasa.gov
+*******************************************************************************
