@@ -22,7 +22,7 @@ class Camera:
         self.invhalfwidth = 1/self.halfwidth
         self.invhalfheight = 1/self.halfheight
         #self.loadingscreen = pyglet.sprite.Sprite(pyglet.image.load('data/sprites/loadingscreen.png'), x=self.halfwidth*-0.425, y=self.halfheight*-0.985)
-        self.loadingscreen = sprite_loader(self, 'loadingscreen2', -1, -1.05, 0.5, None)
+        self.loadingscreen = sprite_loader(self, 'UI3_loadingscreen', -1, -1.05, 0.5, None)
 
     def populate(self, universe):
         self.perspective = self.window.width/self.window.height

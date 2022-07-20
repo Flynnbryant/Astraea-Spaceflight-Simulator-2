@@ -59,15 +59,16 @@ class DataLabel:
     def __init__(self, camera, x, y, batch, group):
         pyglet.font.add_directory('data/font')
         self.text = pyglet.text.Label(
-            '###TEMP###',
+            '123456789.012',
             font_name='CMU Bright Roman',
             font_size=12,
-            width = 5000,
+            width = 500,
             color = (0, 239, 255, 255),
             multiline = True,
             anchor_y='top',
             batch = batch,
-            group=group)
+            group = group)
+        #self.text.halign = 'right'
         self.text.anchor_x = 'left'
         self.text.x = camera.halfwidth*x
         self.text.y = camera.halfheight*y

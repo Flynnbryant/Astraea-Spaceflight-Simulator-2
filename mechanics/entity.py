@@ -2,7 +2,7 @@ import numpy as np
 import statistics
 import time
 
-from data.read_conditions import *
+from data.initial_conditions.read_conditions import *
 from mechanics.orbit import *
 from graphics.labels import *
 from graphics.trace import *

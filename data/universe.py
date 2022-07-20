@@ -24,7 +24,7 @@ class Universe:
         self.vessels = []
         self.entities = []
 
-        with open(f'data/full.csv') as f:
+        with open(f'data/initial_conditions/full.csv') as f:
             data = list(csv.reader(f))
             for entity in data[1:]:
                 Body(entity, self, self.focusinput) if entity[1] == 'body' else Vessel(entity, self, self.focusinput)

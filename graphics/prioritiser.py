@@ -18,7 +18,7 @@ def update_zoom(universe, camera, modifier, focus_change=False):
         consistent = universe.focus_entity.local_planet
         camera.planetary_view = camera.camera_distance<consistent.hill
     global_strength = min(1,np.abs(1-camera.camera_distance/consistent.hill))
-    
+
     if camera.planetary_view:
         consistent.spheroid.calculate_render_detail(universe, camera)
         for object in consistent.satellites:
@@ -33,9 +33,13 @@ def update_zoom(universe, camera, modifier, focus_change=False):
 
     update_features(universe, camera, focus_change)
 
-def update_focus(universe, camera, modifier):
-    universe.focus += modifier
-    universe.focus_entity = universe.entities[universe.focus%(universe.entitylength)]
+def update_focus(universe, camera, modifier, target=False):
+    if target:
+        universe.focus_entity = target
+        universe.focus = universe.focus_entity.focus_num
+    else:
+        universe.focus += modifier
+        universe.focus_entity = universe.entities[universe.focus%(universe.entitylength)]
     universe.focus_entity.label.regenerate_label()
     update_zoom(universe,camera,1,focus_change = True)
 
