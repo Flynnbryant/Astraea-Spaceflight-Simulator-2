@@ -9,26 +9,26 @@ def perturbations(universe):
     for entity in universe.entities[1:]:
         if universe.timestep < 0.02*entity.orbit.period:
 
-            ''' Apply pertubations from its grandparent, if it has one. E.g. sun to moon.'''
-            if entity.primary.object.primary:
-                grandparent_vec = entity.primary.object.barycentre.rpos + entity.barycentre.rpos #THIS IS INCORRECT FOR BODYCENTRE ORBITS. Check vector algebra taking into account parent bodycentre around parent barycentre.
-                entity.barycentre.pvel += universe.timestep*entity.primary.object.primary.SGP*((-grandparent_vec/np.linalg.norm(grandparent_vec)**3) - (-entity.primary.object.barycentre.rpos/np.linalg.norm(entity.primary.object.barycentre.rpos)**3))
-
-            ''' Include a term for notable piblings '''
-
-            ''' Correct for parent error '''
+            ''' 1. Correct for parent error '''
             #if entity.isbarycentric:
             if isinstance(entity.primary, Barycentre) and isinstance(entity, Vessel):
                 true_vec = entity.primary.object.bodycentre.rpos-entity.barycentre.rpos
                 entity.barycentre.pvel += universe.timestep*entity.primary.object.bodycentre.SGP*((true_vec/np.linalg.norm(true_vec)**3) + (entity.barycentre.rpos/np.linalg.norm(entity.barycentre.rpos)**3))
 
-            ''' Apply pertubations from relevant siblings (bodies orbiting around the same parent) '''
-            '''
-            for sibling in entity.major_siblings:
-                pvvec = 0.
-                psvec = 0.
-                entity.barycentre.pvel += universe.timestep*sibling.barycentre.SGP*(0)
-            '''
+            ''' 2. Gravity Harmonics '''
+
+            ''' 3. Pertubations from notable siblings '''
+
+            ''' 4. Pertubations from grandparent '''
+            if entity.primary.object.primary:
+                grandparent_vec = entity.primary.object.barycentre.rpos + entity.barycentre.rpos #THIS IS INCORRECT FOR BODYCENTRE ORBITS. Check vector algebra taking into account parent bodycentre around parent barycentre.
+                entity.barycentre.pvel += universe.timestep*entity.primary.object.primary.SGP*((-grandparent_vec/np.linalg.norm(grandparent_vec)**3) - (-entity.primary.object.barycentre.rpos/np.linalg.norm(entity.primary.object.barycentre.rpos)**3))
+
+            ''' 5. Pertubations from notable piblings '''
+
+            ''' 6. Pertubations from notable niblings '''
+
+            ''' 7. General Relativity '''
 
             ''' Update true positions due to pertubations '''
             entity.barycentre.ppos += entity.barycentre.pvel*universe.timestep

@@ -9,17 +9,18 @@ from mechanics.centres import *
 
 class Body(Entity):
     def __init__(self, data, universe, focus):
-        self.bodycentre, self.barycentre = create_centres(self, sn(data[10]), universe.grav_constant)
+        self.bodycentre, self.barycentre = create_centres(self, data, universe.grav_constant)
         super().__init__(data, universe, focus)
         mass_scale = 0.0001*np.log10(self.bodycentre.mass)
         self.spheroid = Spheroid(self)
 
         if self.primary:
             self.primary.satellites.append(self)
-            self.primary.object.barycentre.SGP += self.barycentre.SGP
-            self.primary.object.barycentre.mass += self.barycentre.mass
-            self.primary.object.barycentre.inverse_SGP = 1/self.primary.object.barycentre.SGP
-            self.primary.object.barycentre.inverse_mass = 1/self.primary.object.barycentre.mass
+            if not self.primary.object.barycentre.complete:
+                self.primary.object.barycentre.SGP += self.barycentre.SGP
+                self.primary.object.barycentre.mass += self.barycentre.mass
+                self.primary.object.barycentre.inverse_SGP = 1/self.primary.object.barycentre.SGP
+                self.primary.object.barycentre.inverse_mass = 1/self.primary.object.barycentre.mass
             self.trace = Trace(self, 52, True)
             self.label = EntityLabel(self, width = mass_scale, height = 20*mass_scale)
         else:
@@ -36,9 +37,9 @@ class Body(Entity):
         universe.bodies.append(self)
 
     def shape_and_orientation(self, data):
-        self.rotation_rate = float(data[14])/86400
-        self.shift = float(data[13]) + float(data[15]) - 946684800.0*self.rotation_rate
-        self.tilt_quaternion, self.axis_vector, self.ECL_to_EQU_matrix, self.EQU_to_ECL_matrix = celestial_to_ecliptic(float(data[11]),float(data[12]))
+        self.rotation_rate = float(data[13])/86400
+        self.shift = float(data[12]) + float(data[14]) - 946684800.0*self.rotation_rate
+        self.tilt_quaternion, self.axis_vector, self.ECL_to_EQU_matrix, self.EQU_to_ECL_matrix = celestial_to_ecliptic(float(data[10]),float(data[11]))
 
         self.oblateness = (self.radii[0]-self.radii[2])/self.radii[0]
         self.precession_constant = -(self.radii[0]**2)*(2*self.oblateness-(self.radii[0]**3)*(np.deg2rad(self.rotation_rate)**2)*self.bodycentre.inverse_SGP)/2

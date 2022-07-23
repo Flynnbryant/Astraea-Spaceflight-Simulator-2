@@ -24,13 +24,17 @@ class Universe:
         self.vessels = []
         self.entities = []
 
-        with open(f'data/initial_conditions/archive/full.csv') as f:
-            data = list(csv.reader(f))
-            for entity in data[1:]:
-                Body(entity, self, self.focusinput) if entity[1] == 'body' else Vessel(entity, self, self.focusinput)
-            #initialise_entities()
-            #configure_masses()
-            #generate_orbits()
+        with open('data/initial_conditions/bodies.csv') as file:
+            data = list(csv.reader(file))
+            for body in data[1:]:
+                body = [item.strip() for item in body]
+                Body(body, self, self.focusinput)
+
+        with open('data/initial_conditions/vessels.csv') as file:
+            data = list(csv.reader(file))
+            for vessel in data[1:]:
+                vessel = [item.strip() for item in vessel]
+                Vessel(vessel, self, self.focusinput)
 
         self.entitylength = len(self.entities)
         self.bodylength = len(self.bodies)-1
@@ -43,3 +47,45 @@ class Universe:
             body.satellites = body.bodycentre.satellites + body.barycentre.satellites
             body.barycentre_transition = 0.5*body.barycentre.satellites[0].orbit.semi_major_axis if body.barycentre.satellites else 0.
             body.orbital_environment(self)
+
+    def read_initial_elements(self, entity):
+        with open(f'data/initial_conditions/horizons_elements/{entity.name}.txt') as file:
+            flag = False
+            for line in file:
+                if flag:
+                    elements = line.split(',')
+                    break
+                elif '$$SOE' in line:
+                    flag = True
+
+        entity.orbit.semi_major_axis    = 1000*sn(elements[11])
+        entity.orbit.eccentricity       = sn(elements[2])
+        entity.orbit.inclination        = np.deg2rad(sn(elements[4]))
+        entity.orbit.arg_periapsis      = np.deg2rad(sn(elements[6]))
+        entity.orbit.long_ascending     = np.deg2rad(sn(elements[5]))
+        entity.orbit.mean_anomaly       = np.deg2rad(sn(elements[9]))
+
+        rotation_constants(entity.orbit)
+        entity.bodycentre.rpos = entity.orbit.elliptical_elements_to_pos(entity.orbit.mean_anomaly)
+        entity.bodycentre.rvel = entity.orbit.elliptical_elements_to_vel()
+        entity.orbit.state_to_elements(entity.bodycentre, self.time)
+
+    def read_initial_TLE(self, entity):
+        with open(f'data/initial_conditions/spacecraft_TLE/{entity.name}.txt') as file:
+            linelist = [line for line in file]
+
+        entity.orbit.semi_major_axis    = np.cbrt(entity.primary.SGP/(float(linelist[2][52:63])*7.2722052166431e-5)**2)
+        entity.orbit.eccentricity       = float('0.'+linelist[2][26:33])
+        entity.orbit.inclination        = np.deg2rad(float(linelist[2][8:16]))
+        entity.orbit.arg_periapsis      = np.deg2rad(float(linelist[2][34:42]))
+        entity.orbit.long_ascending     = np.deg2rad(float(linelist[2][17:25]))
+        entity.orbit.mean_anomaly       = np.deg2rad(float(linelist[2][43:51]))
+
+        rotation_constants(entity.orbit)
+        entity.bodycentre.rpos = entity.orbit.elliptical_elements_to_pos(entity.orbit.mean_anomaly)
+        entity.bodycentre.rvel = entity.orbit.elliptical_elements_to_vel()
+        entity.orbit.state_to_elements(entity.bodycentre, self.time)
+
+def sn(datastr):
+    datalist = datastr.replace(',','').lower().split('e')
+    return np.float64(datalist[0])*10**int(datalist[1])
