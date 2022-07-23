@@ -1,4 +1,5 @@
 import numpy as np
+from mechanics.body import *
 
 def sn(datastr):
     datalist = datastr.replace(',','').lower().split('e')
@@ -20,6 +21,16 @@ def create_centres(object, data, grav_constant):
         bary_mass = bary_SGP/grav_constant
         body_mass = body_SGP/grav_constant
         return Bodycentre(object, body_mass, body_SGP), Barycentre(object, bary_mass, bary_SGP, complete=True)
+
+def personal_primary_mass(object):
+    if isinstance(object.primary,Barycentre) and not object.isvessel:
+        object.PP_mass          = object.primary.mass   - object.barycentre.mass
+        object.PP_SGP           = object.primary.SGP    - object.barycentre.SGP
+    else:
+        object.PP_mass          = object.primary.mass
+        object.PP_SGP           = object.primary.SGP
+    object.PP_inverse_mass  = 1/object.PP_mass
+    object.PP_inverse_SGP   = 1/object.PP_SGP
 
 class Centre():
     def __init__(self, object, mass, SGP):

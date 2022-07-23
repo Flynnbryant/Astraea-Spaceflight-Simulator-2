@@ -38,20 +38,20 @@ class Orbit:
 
     def elliptical_elements_to_vel(self):
         plane_velocity = np.array([-np.sin(self.eccentric_anomaly),np.sqrt(self.omes)*np.cos(self.eccentric_anomaly)])
-        return np.dot(self.rotation_matrix,plane_velocity) * np.sqrt(self.entity.primary.SGP*self.semi_major_axis) / self.rel_dist
+        return np.dot(self.rotation_matrix,plane_velocity) * np.sqrt(self.entity.PP_SGP*self.semi_major_axis) / self.rel_dist
 
     def hyperbolic_elements_to_vel(self):
         plane_velocity = np.array([-np.sin(self.hyperbolic_anomaly),np.sqrt(self.omes)*np.cos(self.hyperbolic_anomaly)])
-        return np.matmul(self.rotation_matrix,plane_velocity) * np.sqrt(self.primary.SGP*self.semi_major_axis) / self.rel_dist
+        return np.matmul(self.rotation_matrix,plane_velocity) * np.sqrt(self.PP_SGP*self.semi_major_axis) / self.rel_dist
 
     def state_to_elements(self, centre, timev):
         self.rel_dist = np.linalg.norm(centre.rpos)
         self.momentum_vec = np.cross(centre.rpos,centre.rvel)
-        self.semi_major_axis = 1/((2/self.rel_dist)-((np.linalg.norm(centre.rvel)**2)*self.entity.primary.inverse_SGP))
-        self.sqrta3omu = np.sqrt(self.entity.primary.inverse_SGP*self.semi_major_axis**3)
+        self.semi_major_axis = 1/((2/self.rel_dist)-((np.linalg.norm(centre.rvel)**2)*self.entity.PP_inverse_SGP))
+        self.sqrta3omu = np.sqrt(self.entity.PP_inverse_SGP*self.semi_major_axis**3)
         self.period = 2*np.pi*self.sqrta3omu
         self.inclination = np.arccos(self.momentum_vec[2]/np.linalg.norm(self.momentum_vec))
-        self.eccentricity_vec = np.cross(centre.rvel,self.momentum_vec)*self.entity.primary.inverse_SGP - centre.rpos/self.rel_dist
+        self.eccentricity_vec = np.cross(centre.rvel,self.momentum_vec)*self.entity.PP_inverse_SGP - centre.rpos/self.rel_dist
         self.eccentricity = np.linalg.norm(self.eccentricity_vec)
         self.periapsis = self.semi_major_axis*(1-self.eccentricity)
         self.semi_minor_axis = self.semi_major_axis*np.sqrt(self.omes)
@@ -63,7 +63,7 @@ class Orbit:
         if self.eccentricity_vec[2] < 0: self.arg_periapsis = math.tau - self.arg_periapsis
         if self.ascending_node[1] < 0: self.long_ascending = math.tau - self.long_ascending
         if np.dot(centre.rpos,centre.rvel) < 0: self.true_anomaly = math.tau - self.true_anomaly
-        self.mean_motion = np.sqrt(self.entity.primary.SGP/self.semi_major_axis**3)
+        self.mean_motion = np.sqrt(self.entity.PP_SGP/self.semi_major_axis**3)
         self.eccentric_anomaly = 2*np.arctan(np.tan(self.true_anomaly*0.5)/np.sqrt((1+self.eccentricity)/(1-self.eccentricity)))
         self.epoch_anomaly = self.eccentric_anomaly-self.eccentricity*np.sin(self.eccentric_anomaly)
         self.epoch_time = timev

@@ -66,6 +66,7 @@ class Universe:
         entity.orbit.mean_anomaly       = np.deg2rad(sn(elements[9]))
 
         rotation_constants(entity.orbit)
+        personal_primary_mass(entity)
         entity.bodycentre.rpos = entity.orbit.elliptical_elements_to_pos(entity.orbit.mean_anomaly)
         entity.bodycentre.rvel = entity.orbit.elliptical_elements_to_vel()
         entity.orbit.state_to_elements(entity.bodycentre, self.time)
@@ -82,6 +83,7 @@ class Universe:
         entity.orbit.mean_anomaly       = np.deg2rad(float(linelist[2][43:51]))
 
         rotation_constants(entity.orbit)
+        personal_primary_mass(entity)
         entity.bodycentre.rpos = entity.orbit.elliptical_elements_to_pos(entity.orbit.mean_anomaly)
         entity.bodycentre.rvel = entity.orbit.elliptical_elements_to_vel()
         entity.orbit.state_to_elements(entity.bodycentre, self.time)

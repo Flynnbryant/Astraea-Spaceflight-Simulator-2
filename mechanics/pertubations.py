@@ -22,7 +22,7 @@ def perturbations(universe):
             ''' 4. Pertubations from grandparent '''
             if entity.primary.object.primary:
                 grandparent_vec = entity.primary.object.barycentre.rpos + entity.barycentre.rpos #THIS IS INCORRECT FOR BODYCENTRE ORBITS. Check vector algebra taking into account parent bodycentre around parent barycentre.
-                entity.barycentre.pvel += universe.timestep*entity.primary.object.primary.SGP*((-grandparent_vec/np.linalg.norm(grandparent_vec)**3) - (-entity.primary.object.barycentre.rpos/np.linalg.norm(entity.primary.object.barycentre.rpos)**3))
+                entity.barycentre.pvel += universe.timestep*entity.primary.object.PP_SGP*((-grandparent_vec/np.linalg.norm(grandparent_vec)**3) - (-entity.primary.object.barycentre.rpos/np.linalg.norm(entity.primary.object.barycentre.rpos)**3))
 
             ''' 5. Pertubations from notable piblings '''
 

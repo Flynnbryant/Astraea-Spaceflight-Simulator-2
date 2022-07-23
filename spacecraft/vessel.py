@@ -5,6 +5,7 @@ import numpy as np
 
 class Vessel(Entity):
     def __init__(self, data, universe, focus):
+        self.isvessel = True
         self.nodes = [Node(False,253399708800)]
         self.bodycentre = Vesselcentre(self)
         self.barycentre = Blankcentre(self)

@@ -9,6 +9,7 @@ from mechanics.centres import *
 
 class Body(Entity):
     def __init__(self, data, universe, focus):
+        self.isvessel = False
         self.bodycentre, self.barycentre = create_centres(self, data, universe.grav_constant)
         super().__init__(data, universe, focus)
         mass_scale = 0.0001*np.log10(self.bodycentre.mass)

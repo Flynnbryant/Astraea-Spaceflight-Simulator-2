@@ -9,6 +9,7 @@ from mechanics.entity import *
 from mechanics.body import *
 from spacecraft.vessel import *
 from mechanics.pertubations import *
+#from mechanics.centres import *
 
 def simulation(universe, camera, dt):
     universe.profile.add('buf')
@@ -58,6 +59,7 @@ def rectify(universe, camera):
 
     universe.refresh_object = universe.bodies[(universe.framecount % universe.bodylength)+1]
     universe.refresh_object.barycentre.rvel = (universe.refresh_object.orbit.elliptical_elements_to_vel() if universe.refresh_object.orbit.eccentricity <1 else universe.refresh_object.orbit.hyperbolic_elements_to_vel()) + universe.refresh_object.barycentre.pvel
+    personal_primary_mass(universe.refresh_object)
     universe.refresh_object.orbit.state_to_elements(universe.refresh_object.barycentre, universe.time)
     universe.refresh_object.barycentre.pvel = np.array([0.,0.,0.],dtype=np.float64)
     universe.refresh_object.barycentre.ppos = np.array([0.,0.,0.],dtype=np.float64)
