@@ -27,7 +27,7 @@ class Entity():
         for body in universe.bodies:
             if body.name == data[1]:
                 self.primary = body.barycentre if data[2] == 'bary' else body.bodycentre
-                self.barycentre_model = data[2] == 'bary'
+                self.barycentric = data[2] == 'bary'
                 if data[4] == 'elements':
                     universe.read_initial_elements(self)
                 elif data[4] == 'TLE':

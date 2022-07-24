@@ -7,31 +7,34 @@ from spacecraft.vessel import *
 def perturbations(universe):
     ''' loop through all bodies and vessels, applying pertubations if the timestep is sufficiently small to be more accurate than not considering them '''
     for entity in universe.entities[1:]:
-        if universe.timestep < 0.02*entity.orbit.period:
-            pass
-            ''' 1. Correct for parent error '''
+        ''' 1. Timestep stable precessions - Gravity Harmonics & General Relativity'''
+        entity.orbit.nodal_precession = universe.timestep*entity.primary.object.precession_constant*np.cos(entity.orbit.inclination)/(entity.orbit.sqrta3omu*(entity.orbit.semi_major_axis*entity.orbit.omes)**2)
 
-            ''' 2. Gravity Harmonics '''
+        if universe.timestep < 0.02*entity.orbit.period:
+            ''' 2. Pertubations from notable siblings & parent '''
+            if entity.barycentric:
+                parent_error = 0.
+                for sibling in entity.primary.satellites:
+                    pass
+                for sibling in entity.primary.object.bodycentre.satellites:
+                    pass
+            else:
+                for sibling in entity.primary.object.barycentre.satellites:
+                    pass
+                for sibling in entity.primary.satellites:
+                    pass
 
             ''' 3. Pertubations from grandparent '''
+            if entity.primary.object.primary:
+                grandparent_error = 0.
 
-            ''' 4. Pertubations from notable siblings '''
+                ''' 4. Pertubations from notable piblings '''
 
-            ''' 5. Pertubations from notable piblings '''
-
-            ''' 6. Pertubations from notable niblings '''
-
-            ''' 7. General Relativity '''
+            else:
+                ''' 5. Pertubations from notable niblings '''
+                pass
 
     universe.profile.add('per')
-
-def major_iblings(entity):
-    entity.major_siblings = []
-    entity.major_piblings = []
-    entity.major_niblings = []
-    for sibling in entity.primary.object.satellites:
-        if sibling is not entity and sibling.barycentre.mass > 1e20:
-            entity.major_siblings.append(sibling)
 
 '''
 # Barycentre

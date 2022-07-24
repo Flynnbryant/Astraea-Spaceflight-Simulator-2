@@ -57,7 +57,7 @@ class Orbit:
         self.semi_minor_axis = self.semi_major_axis*np.sqrt(self.omes)
         self.ascending_node = np.cross(np.array([0,0,1]),self.momentum_vec)
         self.ascending = np.linalg.norm(self.ascending_node)
-        self.long_ascending = np.arccos(self.ascending_node[0]/self.ascending) + self.nodal_precession
+        self.long_ascending = np.arccos(self.ascending_node[0]/self.ascending)
         self.arg_periapsis = np.arccos(np.dot(self.ascending_node, self.eccentricity_vec)/(self.ascending*self.eccentricity))
         self.true_anomaly = np.arccos(np.dot(self.eccentricity_vec,centre.rpos)/(self.eccentricity*self.rel_dist))
         if self.eccentricity_vec[2] < 0: self.arg_periapsis = math.tau - self.arg_periapsis
@@ -66,6 +66,8 @@ class Orbit:
         self.mean_motion = np.sqrt(self.entity.PP_SGP/self.semi_major_axis**3)
         self.eccentric_anomaly = 2*np.arctan(np.tan(self.true_anomaly*0.5)/np.sqrt((1+self.eccentricity)/(1-self.eccentricity)))
         self.epoch_anomaly = self.eccentric_anomaly-self.eccentricity*np.sin(self.eccentric_anomaly)
+        self.long_ascending += self.nodal_precession
+        self.nodal_precession = 0.
         self.epoch_time = timev
         rotation_constants(self)
 

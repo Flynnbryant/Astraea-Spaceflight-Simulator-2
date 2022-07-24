@@ -66,7 +66,6 @@ def rectify(universe, camera):
         universe.refresh_object.trace.points = np.dot(universe.refresh_object.orbit.rotation_matrix,faster_calculate_trace(universe.refresh_object.orbit.eccentricity, universe.refresh_object.trace.trace_detail, universe.refresh_object.orbit.semi_major_axis, universe.refresh_object.orbit.semi_minor_axis, universe.refresh_object.orbit.periapsis))
 
     for vessel in universe.vessels:
-        #vessel.nodal_precession = universe.timestep*vessel.primary.object.precession_constant*np.cos(vessel.inclination)/(vessel.sqrta3omu*(vessel.semi_major_axis*vessel.omes)**2)
         vessel.barycentre.rvel = (vessel.orbit.elliptical_elements_to_vel() if vessel.orbit.eccentricity <1 else vessel.orbit.hyperbolic_elements_to_vel()) + vessel.barycentre.pvel
         vessel.primary.check_model(universe, vessel)
         vessel.orbit.state_to_elements(vessel.barycentre, universe.time)

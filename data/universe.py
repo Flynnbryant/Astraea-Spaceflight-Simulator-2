@@ -58,9 +58,6 @@ class Universe:
             body.outer_label_distance = body.orbit.semi_major_axis * np.log10(body.mean_radius)
             body.inner_label_distance = 0.05 * body.outer_label_distance
 
-        for entity in self.entities[1:]:
-            major_iblings(entity)
-
     def read_initial_elements(self, entity):
         with open(f'data/initial_conditions/horizons_elements/{entity.name}.txt') as file:
             flag = False

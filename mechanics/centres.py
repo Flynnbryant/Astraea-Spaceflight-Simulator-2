@@ -23,7 +23,7 @@ def create_centres(object, data, grav_constant):
         return Bodycentre(object, body_mass, body_SGP), Barycentre(object, bary_mass, bary_SGP, complete=True)
 
 def personal_primary_mass(object):
-    if isinstance(object.primary,Barycentre) and not object.isvessel:
+    if object.barycentric and not object.isvessel:
         object.PP_mass          = object.primary.mass   - object.barycentre.mass
         object.PP_SGP           = object.primary.SGP    - object.barycentre.SGP
     else:

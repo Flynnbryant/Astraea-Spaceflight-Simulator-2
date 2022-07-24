@@ -220,7 +220,7 @@ class HUD:
         self.target = universe.focus_entity
         self.name_label.text.text          = self.target.name.rjust(14)
         self.primary_label.text.text       = self.target.primary.object.name.rjust(14)
-        if isinstance(universe.focus_entity, Body):
+        if not universe.focus_entity.isvessel:
             self.parameters_background.batch = self.HUDBatch
             self.parameters_vessel.batch = None
             self.mass_label.text.text      = format_numeric_label(self.target.bodycentre.mass)
@@ -238,7 +238,7 @@ class HUD:
             self.mass_label.text.text      = format_numeric_label(self.target.orbit.rel_dist - self.target.primary.object.mean_radius)
             self.radius_label.text.text    = 'horizontal velocity'
             self.hill_label.text.text      = 'vertical velocity'
-            self.SOI_label.text.text       = 'Barycentre' if isinstance(self.target.primary, Barycentre) else 'Bodycentre'
+            self.SOI_label.text.text       = 'Barycentre' if self.target.barycentric else 'Bodycentre'
             self.apo_label.text.text           = format_numeric_label(self.target.orbit.semi_major_axis*(1+self.target.orbit.eccentricity) - self.target.primary.object.mean_radius)
             self.peri_label.text.text          = format_numeric_label(self.target.orbit.periapsis - self.target.primary.object.mean_radius)
         else:
