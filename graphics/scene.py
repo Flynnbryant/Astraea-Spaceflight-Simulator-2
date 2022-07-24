@@ -18,7 +18,6 @@ def update_features(universe, camera, focus_change = False):
     camera.spheroids = [universe.star.spheroid]
     camera.traces = []
     camera.labels = [DrawProfile('tra'), universe.star.label]
-    camera.draw_features = [camera.HUD, camera.flare, camera.light, DrawProfile('hud')]
     if camera.planetary_view:
         for object in [universe.focus_entity.local_planet] + universe.focus_entity.local_planet.satellites:
             if object.specific_strength > 0:
@@ -36,11 +35,13 @@ def update_features(universe, camera, focus_change = False):
                 camera.traces.append(object.trace)
                 camera.labels.append(object.label)
 
-    if not camera.cinematic_view:
+    if camera.cinematic_view:
+        camera.draw_features = [camera.flare, camera.light, DrawProfile('hud')]
+    else:
+        camera.draw_features = [camera.HUD, camera.flare, camera.light, DrawProfile('hud'), camera.background]
         for vessel in universe.vessels:
             camera.labels.append(vessel.label)
             camera.traces.append(vessel.trace)
-        camera.draw_features.append(camera.background)
 
     camera.spheroids.append(DrawProfile('sph'))
     camera.labels.append(DrawProfile('lar')) # Keep in mind that rings are part of labels

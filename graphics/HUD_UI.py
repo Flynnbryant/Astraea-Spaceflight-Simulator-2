@@ -105,18 +105,19 @@ class HUD:
             self.camera_background.batch = self.HUDBatch
             self.spacecraft_background.batch = None
             self.parameters_background.batch = None
+            self.parameters_vessel.batch = None
         elif y > -0.92:
             self.press_mode = self.spacecraft_control
             self.draw_mode = self.spacecraft_draw
             self.camera_background.batch = None
             self.spacecraft_background.batch = self.HUDBatch
             self.parameters_background.batch = None
+            self.parameters_vessel.batch = None
         else:
             self.press_mode = self.parameters_control
             self.draw_mode = self.parameters_draw
             self.camera_background.batch = None
             self.spacecraft_background.batch = None
-            self.parameters_background.batch = self.HUDBatch
             self.parameters_setup(self.universe)
 
     def camera_control(self, camera, x, y, button, modifiers):

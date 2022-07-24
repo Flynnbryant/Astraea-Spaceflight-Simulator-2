@@ -67,7 +67,7 @@ def quaternion_rotation_matrix(angle, vec):
         * vec (unit) - the axis of rotation about which to rotate the coordinate system.
 
     Outputs:
-        * rotation_matrix - A transofmration matrix that can be used in matrix multiplication
+        * rotation_matrix - A transformation matrix that can be used in matrix multiplication
             to convert coordinates between two frames of reference.
     '''
     cosa = np.cos(angle)

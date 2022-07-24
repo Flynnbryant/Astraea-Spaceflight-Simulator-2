@@ -1,5 +1,4 @@
 import time
-import random
 import numpy as np
 from scipy.optimize import brentq
 from mechanics.orbit import *
@@ -56,17 +55,15 @@ def rectify(universe, camera):
     for entity in universe.entities:
         entity.barycentre.apos += subtract
         entity.bodycentre.apos += subtract
+    universe.profile.add('rec')
 
     universe.refresh_object = universe.bodies[(universe.framecount % universe.bodylength)+1]
-    universe.refresh_object.barycentre.rvel = (universe.refresh_object.orbit.elliptical_elements_to_vel() if universe.refresh_object.orbit.eccentricity <1 else universe.refresh_object.orbit.hyperbolic_elements_to_vel()) + universe.refresh_object.barycentre.pvel
-    personal_primary_mass(universe.refresh_object)
+    universe.refresh_object.barycentre.rvel = universe.refresh_object.orbit.elliptical_elements_to_vel() + universe.refresh_object.barycentre.pvel
     universe.refresh_object.orbit.state_to_elements(universe.refresh_object.barycentre, universe.time)
     universe.refresh_object.barycentre.pvel = np.array([0.,0.,0.],dtype=np.float64)
     universe.refresh_object.barycentre.ppos = np.array([0.,0.,0.],dtype=np.float64)
     if universe.refresh_object.trace in camera.traces:
         universe.refresh_object.trace.points = np.dot(universe.refresh_object.orbit.rotation_matrix,faster_calculate_trace(universe.refresh_object.orbit.eccentricity, universe.refresh_object.trace.trace_detail, universe.refresh_object.orbit.semi_major_axis, universe.refresh_object.orbit.semi_minor_axis, universe.refresh_object.orbit.periapsis))
-        if random.random() < 0.1:
-            universe.refresh_object.label.regenerate_label()
 
     for vessel in universe.vessels:
         #vessel.nodal_precession = universe.timestep*vessel.primary.object.precession_constant*np.cos(vessel.inclination)/(vessel.sqrta3omu*(vessel.semi_major_axis*vessel.omes)**2)
@@ -75,4 +72,4 @@ def rectify(universe, camera):
         vessel.orbit.state_to_elements(vessel.barycentre, universe.time)
         vessel.trace.points = np.dot(vessel.orbit.rotation_matrix,faster_calculate_trace(vessel.orbit.eccentricity, vessel.trace.trace_detail, vessel.orbit.semi_major_axis, vessel.orbit.semi_minor_axis, vessel.orbit.periapsis))
         vessel.barycentre.pvel = np.array([0.,0.,0.],dtype=np.float64)
-    universe.profile.add('ret')
+    universe.profile.add('ref')

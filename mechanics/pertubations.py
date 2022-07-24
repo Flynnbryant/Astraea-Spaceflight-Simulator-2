@@ -8,21 +8,14 @@ def perturbations(universe):
     ''' loop through all bodies and vessels, applying pertubations if the timestep is sufficiently small to be more accurate than not considering them '''
     for entity in universe.entities[1:]:
         if universe.timestep < 0.02*entity.orbit.period:
-
+            pass
             ''' 1. Correct for parent error '''
-            #if entity.isbarycentric:
-            if isinstance(entity.primary, Barycentre) and isinstance(entity, Vessel):
-                true_vec = entity.primary.object.bodycentre.rpos-entity.barycentre.rpos
-                entity.barycentre.pvel += universe.timestep*entity.primary.object.bodycentre.SGP*((true_vec/np.linalg.norm(true_vec)**3) + (entity.barycentre.rpos/np.linalg.norm(entity.barycentre.rpos)**3))
 
             ''' 2. Gravity Harmonics '''
 
-            ''' 3. Pertubations from notable siblings '''
+            ''' 3. Pertubations from grandparent '''
 
-            ''' 4. Pertubations from grandparent '''
-            if entity.primary.object.primary:
-                grandparent_vec = entity.primary.object.barycentre.rpos + entity.barycentre.rpos #THIS IS INCORRECT FOR BODYCENTRE ORBITS. Check vector algebra taking into account parent bodycentre around parent barycentre.
-                entity.barycentre.pvel += universe.timestep*entity.primary.object.PP_SGP*((-grandparent_vec/np.linalg.norm(grandparent_vec)**3) - (-entity.primary.object.barycentre.rpos/np.linalg.norm(entity.primary.object.barycentre.rpos)**3))
+            ''' 4. Pertubations from notable siblings '''
 
             ''' 5. Pertubations from notable piblings '''
 
@@ -32,12 +25,13 @@ def perturbations(universe):
 
     universe.profile.add('per')
 
-def major_siblings(entity):
-    major_siblings = []
+def major_iblings(entity):
+    entity.major_siblings = []
+    entity.major_piblings = []
+    entity.major_niblings = []
     for sibling in entity.primary.object.satellites:
         if sibling is not entity and sibling.barycentre.mass > 1e20:
-            major_siblings.append(sibling)
-    return major_siblings
+            entity.major_siblings.append(sibling)
 
 '''
 # Barycentre

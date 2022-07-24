@@ -59,7 +59,7 @@ class Universe:
             body.inner_label_distance = 0.05 * body.outer_label_distance
 
         for entity in self.entities[1:]:
-            major_siblings(entity)
+            major_iblings(entity)
 
     def read_initial_elements(self, entity):
         with open(f'data/initial_conditions/horizons_elements/{entity.name}.txt') as file:

@@ -1,4 +1,5 @@
 import time
+import random
 import pyglet
 import numpy as np
 from OpenGL.GL import *
@@ -33,6 +34,8 @@ class EntityLabel:
             anchor_x='center', anchor_y='bottom')
 
     def draw(self, universe, camera):
+        if random.random() < 0.001:
+            self.regenerate_label()
         glMatrixMode(GL_MODELVIEW)
         glDisable(GL_DEPTH_TEST)
         camera.moveCamera()
