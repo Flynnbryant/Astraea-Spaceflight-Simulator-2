@@ -30,10 +30,14 @@ def perturbations(universe):
 
             ''' 7. General Relativity '''
 
-            ''' Update true positions due to pertubations '''
-            entity.barycentre.ppos += entity.barycentre.pvel*universe.timestep
-            entity.barycentre.rpos += entity.barycentre.ppos
     universe.profile.add('per')
+
+def major_siblings(entity):
+    major_siblings = []
+    for sibling in entity.primary.object.satellites:
+        if sibling is not entity and sibling.barycentre.mass > 1e20:
+            major_siblings.append(sibling)
+    return major_siblings
 
 '''
 # Barycentre

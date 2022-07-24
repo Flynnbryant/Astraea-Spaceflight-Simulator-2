@@ -12,7 +12,6 @@ class Vessel(Entity):
         super().__init__(data, universe, focus, radii=False)
         self.label = EntityLabel(self, width = 0.008, height = 0.03)
         universe.vessels.append(self)
-        self.trace = Trace(self, 52, True)
 
     def change_primary(self, universe, new_primary, barycentre = True):
         self.primary = new_primary.barycentre if barycentre else new_primary.bodycentre

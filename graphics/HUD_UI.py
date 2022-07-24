@@ -233,19 +233,22 @@ class HUD:
     def parameters_draw(self, universe, camera):
         if universe.focus_entity is not self.target:
             self.parameters_setup(universe)
-        if isinstance(universe.focus_entity, Vessel):
+        if universe.focus_entity.isvessel:
             self.mass_label.text.text      = format_numeric_label(self.target.orbit.rel_dist - self.target.primary.object.mean_radius)
             self.radius_label.text.text    = 'horizontal velocity'
             self.hill_label.text.text      = 'vertical velocity'
             self.SOI_label.text.text       = 'Barycentre' if isinstance(self.target.primary, Barycentre) else 'Bodycentre'
+            self.apo_label.text.text           = format_numeric_label(self.target.orbit.semi_major_axis*(1+self.target.orbit.eccentricity) - self.target.primary.object.mean_radius)
+            self.peri_label.text.text          = format_numeric_label(self.target.orbit.periapsis - self.target.primary.object.mean_radius)
+        else:
+            self.apo_label.text.text           = format_numeric_label(self.target.orbit.semi_major_axis*(1+self.target.orbit.eccentricity))
+            self.peri_label.text.text          = format_numeric_label(self.target.orbit.periapsis)
         self.axis_label.text.text              = format_numeric_label(self.target.orbit.semi_major_axis)
         self.eccentricity_label.text.text      = format_numeric_label(self.target.orbit.eccentricity)
         self.inclination_label.text.text       = format_numeric_label(np.rad2deg(self.target.orbit.inclination))
         self.long_label.text.text              = format_numeric_label(np.rad2deg(self.target.orbit.long_ascending))
         self.arg_label.text.text               = format_numeric_label(np.rad2deg(self.target.orbit.arg_periapsis))
         self.true_label.text.text              = format_numeric_label(np.rad2deg(self.target.orbit.true_anomaly))
-        self.apo_label.text.text               = format_numeric_label(self.target.orbit.semi_major_axis*(1+self.target.orbit.eccentricity))
-        self.peri_label.text.text              = format_numeric_label(self.target.orbit.periapsis)
         self.period_label.text.text            = format_numeric_label(self.target.orbit.period)
         self.distance_label.text.text          = format_numeric_label(np.linalg.norm(self.target.orbit.rel_dist))
         self.velocity_label.text.text          = format_numeric_label(np.linalg.norm(self.target.barycentre.rvel))

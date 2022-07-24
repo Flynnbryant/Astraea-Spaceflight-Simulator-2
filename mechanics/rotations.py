@@ -82,18 +82,18 @@ def quaternion_rotation_matrix(angle, vec):
     return rotation_matrix
 
 def rotation_constants(orbit):
-   sinw = np.sin(orbit.arg_periapsis)
-   cosw = np.cos(orbit.arg_periapsis)
-   sino = np.sin(orbit.long_ascending)
-   coso = np.cos(orbit.long_ascending)
-   sini = np.sin(orbit.inclination)
-   cosi = np.cos(orbit.inclination)
+    sinw = np.sin(orbit.arg_periapsis)
+    cosw = np.cos(orbit.arg_periapsis)
+    sino = np.sin(orbit.long_ascending)
+    coso = np.cos(orbit.long_ascending)
+    sini = np.sin(orbit.inclination)
+    cosi = np.cos(orbit.inclination)
 
-   orbit.rotation_matrix = np.array([
-   [cosw*coso - sinw*cosi*sino, -(sinw*coso + cosw*cosi*sino)],
-   [cosw*sino + sinw*cosi*coso, cosw*cosi*coso - sinw*sino],
-   [sinw*sini, cosw*sini]])
+    orbit.rotation_matrix = np.array([
+    [cosw*coso - sinw*cosi*sino, -(sinw*coso + cosw*cosi*sino)],
+    [cosw*sino + sinw*cosi*coso, cosw*cosi*coso - sinw*sino],
+    [sinw*sini, cosw*sini]])
 
-   orbit.omes = 1-orbit.eccentricity**2
-   orbit.sqrtm = np.sqrt(1-orbit.eccentricity)
-   orbit.sqrtp = np.sqrt(1+orbit.eccentricity)
+    orbit.omes = 1-orbit.eccentricity**2
+    orbit.sqrtm = np.sqrt(1-orbit.eccentricity)
+    orbit.sqrtp = np.sqrt(1+orbit.eccentricity)

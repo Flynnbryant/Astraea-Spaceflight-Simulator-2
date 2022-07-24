@@ -9,7 +9,6 @@ from mechanics.entity import *
 from mechanics.body import *
 from spacecraft.vessel import *
 from mechanics.pertubations import *
-#from mechanics.centres import *
 
 def simulation(universe, camera, dt):
     universe.profile.add('buf')
@@ -31,10 +30,8 @@ def osculating_orbits(universe):
     for entity in universe.entities[1:]:
         entity.orbit.mean_anomaly = (entity.orbit.epoch_anomaly + (universe.time-entity.orbit.epoch_time)*entity.orbit.mean_motion)%(2*np.pi)
         entity.orbit.eccentric_anomaly = brentq(eccentric_anomaly,-0.1,6.3,args=(entity.orbit.eccentricity, entity.orbit.mean_anomaly),xtol=1e-9)
-        if entity.orbit.eccentricity < 1:
-            entity.orbit.true_anomaly, entity.orbit.rel_dist, entity.barycentre.rpos = faster_elements_to_pos(entity.orbit.sqrtp, entity.orbit.eccentric_anomaly, entity.orbit.sqrtm, entity.orbit.semi_major_axis, entity.orbit.eccentricity, entity.orbit.rotation_matrix)
-        else:
-            entity.orbit.true_anomaly, entity.orbit.rel_dist, entity.barycentre.rpos = faster_hyperbolic_elements_to_pos(entity.orbit.sqrtp, entity.orbit.eccentric_anomaly, entity.orbit.sqrtm, entity.orbit.semi_major_axis, entity.orbit.eccentricity, entity.orbit.rotation_matrix)
+        arglist = [entity.orbit.sqrtp, entity.orbit.eccentric_anomaly, entity.orbit.sqrtm, entity.orbit.semi_major_axis, entity.orbit.eccentricity, entity.orbit.rotation_matrix]
+        entity.orbit.true_anomaly, entity.orbit.rel_dist, entity.barycentre.rpos = faster_elements_to_pos(*arglist) if entity.orbit.eccentricity < 1 else faster_hyperbolic_elements_to_pos(*arglist)
 
     ''' Using conservation of momentum, calculate the positions of the sun and planets relative to their barycentres '''
     for planet in universe.star.satellites:
@@ -43,6 +40,9 @@ def osculating_orbits(universe):
     universe.profile.add('osc')
 
 def rectify(universe, camera):
+    for entity in universe.entities:
+        entity.barycentre.ppos += entity.barycentre.pvel*universe.timestep
+        entity.barycentre.rpos += entity.barycentre.ppos
     universe.star.bodycentre.apos = universe.star.barycentre.apos + universe.star.bodycentre.rpos
     for planet in universe.star.satellites:
         planet.barycentre.apos = planet.barycentre.rpos + planet.primary.apos

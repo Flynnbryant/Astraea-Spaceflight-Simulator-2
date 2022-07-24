@@ -6,6 +6,7 @@ from analysis.profile import *
 from spacecraft.node import *
 from mechanics.body import *
 from mechanics.entity import *
+from mechanics.pertubations import *
 from spacecraft.vessel import *
 
 class Universe:
@@ -39,14 +40,26 @@ class Universe:
         self.entitylength = len(self.entities)
         self.bodylength = len(self.bodies)-1
 
-        self.star.satellites = self.star.bodycentre.satellites + self.star.barycentre.satellites
-        self.star.neg_inv_mass = -1/(self.star.bodycentre.mass*sum(planet.barycentre.mass for planet in self.star.satellites))
-        self.star.barycentre_transition = 0.5*self.star.barycentre.satellites[0].orbit.semi_major_axis
+        for entity in self.entities[1:]:
+            personal_primary_mass(entity)
+            rotation_constants(entity.orbit)
+            entity.bodycentre.rpos = entity.orbit.elliptical_elements_to_pos(entity.orbit.mean_anomaly)
+            entity.bodycentre.rvel = entity.orbit.elliptical_elements_to_vel()
+            entity.orbit.state_to_elements(entity.bodycentre, self.time)
+            entity.trace = Trace(entity, 52, True)
 
+        self.star.satellites = self.star.bodycentre.satellites + self.star.barycentre.satellites
+        self.star.barycentre_transition = 0.5*self.star.barycentre.satellites[0].orbit.semi_major_axis
         for body in self.bodies[1:]:
             body.satellites = body.bodycentre.satellites + body.barycentre.satellites
-            body.barycentre_transition = 0.5*body.barycentre.satellites[0].orbit.semi_major_axis if body.barycentre.satellites else 0.
-            body.orbital_environment(self)
+            body.barycentre_transition = 0.5*body.barycentre.satellites[0].orbit.semi_major_axis if body.barycentre.satellites   else np.inf
+            body.hill = body.orbit.semi_major_axis*(1-body.orbit.eccentricity)*np.cbrt(body.barycentre.mass/(3*body.primary.mass))
+            body.SOI = body.orbit.semi_major_axis*(body.barycentre.mass/body.primary.mass)**(0.4)
+            body.outer_label_distance = body.orbit.semi_major_axis * np.log10(body.mean_radius)
+            body.inner_label_distance = 0.05 * body.outer_label_distance
+
+        for entity in self.entities[1:]:
+            major_siblings(entity)
 
     def read_initial_elements(self, entity):
         with open(f'data/initial_conditions/horizons_elements/{entity.name}.txt') as file:
@@ -65,12 +78,6 @@ class Universe:
         entity.orbit.long_ascending     = np.deg2rad(sn(elements[5]))
         entity.orbit.mean_anomaly       = np.deg2rad(sn(elements[9]))
 
-        rotation_constants(entity.orbit)
-        personal_primary_mass(entity)
-        entity.bodycentre.rpos = entity.orbit.elliptical_elements_to_pos(entity.orbit.mean_anomaly)
-        entity.bodycentre.rvel = entity.orbit.elliptical_elements_to_vel()
-        entity.orbit.state_to_elements(entity.bodycentre, self.time)
-
     def read_initial_TLE(self, entity):
         with open(f'data/initial_conditions/spacecraft_TLE/{entity.name}.txt') as file:
             linelist = [line for line in file]
@@ -81,12 +88,6 @@ class Universe:
         entity.orbit.arg_periapsis      = np.deg2rad(float(linelist[2][34:42]))
         entity.orbit.long_ascending     = np.deg2rad(float(linelist[2][17:25]))
         entity.orbit.mean_anomaly       = np.deg2rad(float(linelist[2][43:51]))
-
-        rotation_constants(entity.orbit)
-        personal_primary_mass(entity)
-        entity.bodycentre.rpos = entity.orbit.elliptical_elements_to_pos(entity.orbit.mean_anomaly)
-        entity.bodycentre.rvel = entity.orbit.elliptical_elements_to_vel()
-        entity.orbit.state_to_elements(entity.bodycentre, self.time)
 
 def sn(datastr):
     datalist = datastr.replace(',','').lower().split('e')
