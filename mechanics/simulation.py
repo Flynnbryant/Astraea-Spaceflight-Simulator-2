@@ -63,12 +63,12 @@ def rectify(universe, camera):
     universe.refresh_object.barycentre.pvel = np.array([0.,0.,0.],dtype=np.float64)
     universe.refresh_object.barycentre.ppos = np.array([0.,0.,0.],dtype=np.float64)
     if universe.refresh_object.trace in camera.traces:
-        universe.refresh_object.trace.points = np.dot(universe.refresh_object.orbit.rotation_matrix,faster_calculate_trace(universe.refresh_object.orbit.eccentricity, universe.refresh_object.trace.trace_detail, universe.refresh_object.orbit.semi_major_axis, universe.refresh_object.orbit.semi_minor_axis, universe.refresh_object.orbit.periapsis))
+        universe.refresh_object.trace.points = np.dot(universe.refresh_object.orbit.rotation_matrix,faster_calculate_trace(universe.refresh_object.orbit.eccentricity, universe.refresh_object.trace.trace_detail, universe.refresh_object.orbit.semi_major_axis, universe.refresh_object.orbit.semi_minor_axis, universe.refresh_object.orbit.periapsis, universe.refresh_object.orbit.true_anomaly))
 
     for vessel in universe.vessels:
         vessel.barycentre.rvel = (vessel.orbit.elliptical_elements_to_vel() if vessel.orbit.eccentricity <1 else vessel.orbit.hyperbolic_elements_to_vel()) + vessel.barycentre.pvel
         vessel.primary.check_model(universe, vessel)
         vessel.orbit.state_to_elements(vessel.barycentre, universe.time)
-        vessel.trace.points = np.dot(vessel.orbit.rotation_matrix,faster_calculate_trace(vessel.orbit.eccentricity, vessel.trace.trace_detail, vessel.orbit.semi_major_axis, vessel.orbit.semi_minor_axis, vessel.orbit.periapsis))
+        vessel.trace.points = np.dot(vessel.orbit.rotation_matrix,faster_calculate_trace(vessel.orbit.eccentricity, vessel.trace.trace_detail, vessel.orbit.semi_major_axis, vessel.orbit.semi_minor_axis, vessel.orbit.periapsis, vessel.orbit.true_anomaly))
         vessel.barycentre.pvel = np.array([0.,0.,0.],dtype=np.float64)
     universe.profile.add('ref')

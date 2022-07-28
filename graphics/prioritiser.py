@@ -22,11 +22,11 @@ def update_zoom(universe, camera, modifier, focus_change=False):
     if camera.planetary_view:
         consistent.spheroid.calculate_render_detail(universe, camera)
         for object in consistent.satellites:
-            specific_strength(camera, universe, object, global_strength)
+            specific_strength(camera, universe, object, global_strength, planetary=True)
             object.spheroid.calculate_render_detail(universe, camera)
     else:
         for object in universe.star.satellites:
-            specific_strength(camera, universe, object, global_strength)
+            specific_strength(camera, universe, object, global_strength, planetary=False)
 
     consistent.specific_strength = 1
     consistent.label.text.color = (*(consistent.color*consistent.specific_strength).astype(int), 255)
@@ -49,11 +49,12 @@ def update_fov(universe, camera, modifier=1, value=None):
     camera.fov *= modifier
     update_zoom(universe, camera, 1)
 
-def specific_strength(camera, universe, object, global_strength):
+def specific_strength(camera, universe, object, global_strength, planetary=True):
+    # Planetary is an unused variable. When zoomed out to not be in planetary view, then switching focus between a planet and a moon causes a difference in specific strength of other sol satellites
     if object is universe.focus_entity:
         object.specific_strength = 1
     else:
-        if object.primary is universe.focus_entity.primary:
+        if object.primary.object is universe.focus_entity.primary.object:
             distance = max(universe.focus_entity.orbit.semi_major_axis,camera.camera_distance-object.orbit.semi_major_axis)
         else:
             distance = camera.camera_distance

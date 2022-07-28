@@ -21,14 +21,17 @@ class Camera:
         self.halfheight = self.window.height//2
         self.invhalfwidth = 1/self.halfwidth
         self.invhalfheight = 1/self.halfheight
-        #self.loadingscreen = pyglet.sprite.Sprite(pyglet.image.load('data/sprites/loadingscreen.png'), x=self.halfwidth*-0.425, y=self.halfheight*-0.985)
+        self.front_dist = 0.000006676
+        self.back_dist = 200.0
         self.loadingscreen = sprite_loader(self, 'UI3_loadingscreen', -1, -1.05, 0.5, None)
 
     def populate(self, universe):
         self.perspective = self.window.width/self.window.height
         self.pos = np.array([0., 0., -2.])
-        self.camera_distance = 1e9
-        self.horizontal_rot = 180.1
+        #self.camera_distance = 1e9
+        self.camera_distance = universe.focus_entity.local_planet.hill * 0.01
+        #self.horizontal_rot = 180.1
+        self.horizontal_rot = 0.
         self.vertical_rot = -75.1
         self.tilt = 0
         self.focus = 0
@@ -51,7 +54,7 @@ class Camera:
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
         glTranslatef(0, 0, 0)
-        gluPerspective(self.fov, self.perspective, 0.000007, 2000.0)
+        gluPerspective(self.fov, self.perspective, self.front_dist, self.back_dist)
         #glFrustum(-0.0001,0.0001,-0.0001,0.0001,0.001, 2000.0)
         glTranslatef(*self.pos)
         glRotatef(self.tilt, 0, 1, 0)

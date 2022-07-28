@@ -42,8 +42,9 @@ class EntityLabel:
         pos = camera.model_to_projection(self.entity.bodycentre.apos + [0.,0.,self.entity.mean_radius])
         glDisable(GL_LIGHTING)
         glMatrixMode(GL_PROJECTION)
+        glLoadIdentity()
+        
         if pos[1] > -0.73:
-            glLoadIdentity()
             glColor3f(*(self.entity.colorsmall*self.entity.specific_strength))
             glBegin(GL_TRIANGLES) # Speed up
             glVertex3f(*pos)

@@ -13,7 +13,7 @@ class Spheroid:
     def draw(self, universe, camera):
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
-        gluPerspective(camera.fov, camera.perspective, 0.000007, 2000.0)
+        gluPerspective(camera.fov, camera.perspective, camera.front_dist, camera.back_dist)
         glTranslatef(*camera.pos)
         glRotatef(camera.tilt, 0, 1, 0)
         glRotatef(camera.vertical_rot, 1, 0, 0)
@@ -54,7 +54,7 @@ class Background:
     def draw(self, universe, camera):
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
-        gluPerspective(camera.fov, camera.perspective, 0.000007, 2000.0)
+        gluPerspective(camera.fov, camera.perspective, camera.front_dist, camera.back_dist)
         glRotatef(camera.tilt, 0, 1, 0)
         glRotatef(camera.vertical_rot, 1, 0, 0)
         glRotatef(camera.horizontal_rot, 0, 0, 1)

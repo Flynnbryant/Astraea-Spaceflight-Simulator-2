@@ -8,7 +8,8 @@ def perturbations(universe):
     ''' loop through all bodies and vessels, applying pertubations if the timestep is sufficiently small to be more accurate than not considering them '''
     for entity in universe.entities[1:]:
         ''' 1. Timestep stable precessions - Gravity Harmonics & General Relativity'''
-        entity.orbit.nodal_precession = universe.timestep*entity.primary.object.precession_constant*np.cos(entity.orbit.inclination)/(entity.orbit.sqrta3omu*(entity.orbit.semi_major_axis*entity.orbit.omes)**2)
+        if entity.isvessel: # Keep this line in until nodal precession is in the correct reference frame.
+            entity.orbit.nodal_precession = universe.timestep*entity.primary.object.precession_constant*np.cos(entity.orbit.inclination)/(entity.orbit.sqrta3omu*(entity.orbit.semi_major_axis*entity.orbit.omes)**2)
 
         if universe.timestep < 0.02*entity.orbit.period:
             ''' 2. Pertubations from notable siblings & parent '''

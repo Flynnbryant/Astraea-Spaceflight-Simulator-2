@@ -49,4 +49,4 @@ def update_features(universe, camera, focus_change = False):
 
     if focus_change:
         for trace in camera.traces:
-            trace.points = np.dot(trace.orbit.rotation_matrix,faster_calculate_trace(trace.orbit.eccentricity, trace.trace_detail, trace.orbit.semi_major_axis, trace.orbit.semi_minor_axis, trace.orbit.periapsis))
+            trace.points = np.dot(trace.orbit.rotation_matrix,faster_calculate_trace(trace.orbit.eccentricity, trace.trace_detail, trace.orbit.semi_major_axis, trace.orbit.semi_minor_axis, trace.orbit.periapsis, trace.orbit.mean_anomaly))

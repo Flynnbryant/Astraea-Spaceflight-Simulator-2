@@ -5,6 +5,8 @@ from graphics.HUD_UI import *
 
 class Mouse(pyglet.window.Window):
     def __init__(self, universe, *args, **kwargs):
+        #config = pyglet.gl.Config() #sample_buffers=1, samples=2
+        #super().__init__(*args,resizable=True,vsync=0,config=config,**kwargs)
         super().__init__(*args,resizable=True,vsync=0,**kwargs)
         self.set_icon(pyglet.image.load('data/textures/icon.png'))
         self.universe = universe

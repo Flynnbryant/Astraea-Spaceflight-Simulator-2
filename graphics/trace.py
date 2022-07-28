@@ -5,8 +5,8 @@ from mechanics.orbit import *
 from numba import njit
 
 @njit
-def faster_calculate_trace(eccentricity, trace_detail, semi_major_axis, semi_minor_axis, periapsis):
-    values = np.linspace(0, 2*np.pi, trace_detail)
+def faster_calculate_trace(eccentricity, trace_detail, semi_major_axis, semi_minor_axis, periapsis, true_anomaly):
+    values = np.add(np.pi*(np.sin(np.linspace(-0.5*np.pi, 0.5*np.pi, trace_detail))+1),true_anomaly)
     array = np.add(-0.5*eccentricity*np.sin(2*values),values)
     return [semi_major_axis * np.cos(array) + (periapsis - semi_major_axis), semi_minor_axis * np.sin(array)]
 
@@ -18,10 +18,10 @@ class Trace:
     def __init__(self, entity, bodylength, vesseltype):
         self.entity = entity
         self.orbit = entity.orbit
-        self.trace_detail = 512
+        self.trace_detail = 2**(int(np.log10(entity.orbit.semi_major_axis/entity.mean_radius))+6)
         self.bodylength = bodylength
         self.bodytype = not vesseltype
-        self.points = np.dot(self.orbit.rotation_matrix,faster_calculate_trace(self.orbit.eccentricity, self.trace_detail, self.orbit.semi_major_axis, self.orbit.semi_minor_axis, self.orbit.periapsis))
+        self.points = np.dot(self.orbit.rotation_matrix,faster_calculate_trace(self.orbit.eccentricity, self.trace_detail, self.orbit.semi_major_axis, self.orbit.semi_minor_axis, self.orbit.periapsis, self.orbit.true_anomaly))
 
     def draw(self, universe, camera):
         camera.moveCamera()

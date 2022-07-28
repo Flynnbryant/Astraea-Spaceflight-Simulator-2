@@ -14,7 +14,7 @@ def frame(dt,universe,camera):
     drawScene(universe,camera)
     universe.profile.output(dt)
 
-universe = Universe(focus='Earth',profile=False)
+universe = Universe(focus='Luna',profile=False)
 window = Mouse(universe,1920,1080,caption=title)
 camera = Camera(universe,window)
 
